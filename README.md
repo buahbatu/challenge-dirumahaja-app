@@ -1,4 +1,4 @@
-# challenge_dirumahaja
+# dirumahaja
 
 A new Flutter project.
 
