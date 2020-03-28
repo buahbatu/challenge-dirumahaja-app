@@ -1,5 +1,5 @@
 import 'package:dirumahaja/core/res/app_color.dart';
-import 'package:dirumahaja/feature/rule_box/rule_box.dart';
+import 'package:dirumahaja/feature/rulebook/rule_box.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

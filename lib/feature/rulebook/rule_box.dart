@@ -1,11 +1,14 @@
-import 'package:dirumahaja/core/result/entity/entity_rule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:dirumahaja/core/result/entity/entity_rule.dart';
+
 class RuleBox extends StatelessWidget {
+  final double height;
   const RuleBox({
     Key key,
+    this.height = 400,
   }) : super(key: key);
 
   @override
@@ -13,7 +16,7 @@ class RuleBox extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        height: 400,
+        height: height,
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
