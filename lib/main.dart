@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Challenge #dirumahaja',
-      home: SplashScreen(title: '#dirumahaja \nChallenge'),
+      home: SplashScreen(),
     );
   }
 }

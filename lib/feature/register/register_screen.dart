@@ -1,7 +1,10 @@
+import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -11,7 +14,7 @@ class RegisterScreen extends StatefulWidget {
 
   final pages = [
     RuleBookScreen(),
-    RuleBookScreen(),
+    ProfileScreen(),
     RuleBookScreen(),
     RuleBookScreen(),
   ];
@@ -20,10 +23,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
-    AppImages.blueBg.toSvgPicture();
     return Scaffold(
       body: Container(
         width: double.infinity,
+        decoration: BoxDecoration(gradient: AppColor.skyGradient),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
@@ -67,37 +70,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<Widget> getBackgrounds() {
     return [
-      AppImages.pinkBg.toSvgPicture(
-        height: 240,
-        color: HexColor('FFD4D2'),
-        fit: BoxFit.fitHeight,
-      ),
-      AppImages.yellowBg.toSvgPicture(
-        height: 190,
-        color: HexColor('FBEDC3'),
-        fit: BoxFit.fitHeight,
-      ),
-      AppImages.blueBg.toSvgPicture(
-        height: 130,
-        color: HexColor('A6D2F4'),
-        fit: BoxFit.fitHeight,
+      AppImages.homeBgSmallPng.toPngImage(
+        width: double.infinity,
+        fit: BoxFit.fitWidth,
       ),
     ];
   }
 
   Widget getNextButton() {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.all(0),
-      height: 52,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-        child: Text(currentPage < RegisterScreen.maxPage - 1
-            ? 'Next'
-            : 'Mulai Challenge!'),
-        textColor: Colors.white,
-        color: HexColor('504658'),
-        onPressed: onNextClick,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 52,
+        width: double.infinity,
+        margin: EdgeInsets.all(16),
+        child: RaisedButton(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            currentPage < RegisterScreen.maxPage - 1
+                ? 'Lanjut'
+                : 'Oke, Aku Siap!',
+            style: GoogleFonts.muli(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          color: HexColor('FDA624'),
+          onPressed: onNextClick,
+        ),
       ),
     );
   }

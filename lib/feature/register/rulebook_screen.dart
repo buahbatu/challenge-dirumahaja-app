@@ -14,7 +14,7 @@ class RuleBookScreen extends StatelessWidget {
         children: <Widget>[
           Container(height: 64),
           Text(
-            'Rule Book',
+            'Aturan Main',
             textAlign: TextAlign.center,
             style: GoogleFonts.raleway(
               fontSize: 36,

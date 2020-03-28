@@ -5,18 +5,16 @@ import 'package:dirumahaja/feature/dashboard/dshboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   final AppPreferance pref;
 
   _SplashScreenState({AppPreferance pref})
@@ -27,31 +25,44 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     checkLoginState();
+    showButton();
   }
+
+  void showButton() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      _heightButton = 52;
+      _widthButton = double.infinity;
+    });
+  }
+
+  double _heightButton = 0;
+  double _widthButton = 0;
 
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
     final isLogin = await pref.loadData('isLogin', defaultValue: false);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (ctx) => isLogin ? DashboardScreen() : RegisterScreen(),
-      ),
-      (r) => false,
-    );
+    if (isLogin) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+        (r) => false,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    AppImages.blueBg.toSvgPicture();
     return Scaffold(
-      backgroundColor: HexColor('FCF8F3'),
       body: Container(
+        decoration: BoxDecoration(gradient: AppColor.skyGradient),
         width: double.infinity,
+        height: double.infinity,
         child: Stack(
-          alignment: Alignment.bottomCenter,
           children: <Widget>[
             ...getBackgrounds(),
-            getForeground(),
+            getTextSection(),
+            getLoadingKit(),
+            getNextButton()
           ],
         ),
       ),
@@ -60,49 +71,139 @@ class _SplashScreenState extends State<SplashScreen> {
 
   List<Widget> getBackgrounds() {
     return [
-      AppImages.pinkBg.toSvgPicture(
-        height: 240,
-        fit: BoxFit.fitHeight,
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: AppImages.homeBgPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
-      AppImages.yellowBg.toSvgPicture(
-        height: 190,
-        fit: BoxFit.fitHeight,
-      ),
-      AppImages.blueBg.toSvgPicture(
-        height: 130,
-        fit: BoxFit.fitHeight,
+      Align(
+        alignment: Alignment.topCenter,
+        child: AppImages.cloudBgPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
     ];
   }
 
-  Container getForeground() {
+  Widget getTextSection() {
+    // AnimatedSize()
     return Container(
       width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            widget.title,
+            'AYOK',
             textAlign: TextAlign.center,
             style: GoogleFonts.raleway(
               fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: AppColor.titleColor.toHexColor(),
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 8.0,
+                  color: Colors.black.withOpacity(0.25),
+                  offset: Offset(8.0, 16.0),
+                ),
+              ],
             ),
           ),
-          getImageRow(),
+          Text(
+            'DI RUMAH AJA',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.raleway(
+              fontSize: 46,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 8.0,
+                  color: Colors.black.withOpacity(0.25),
+                  offset: Offset(8.0, 16.0),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            'Challenge',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.raleway(
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 8.0,
+                  color: Colors.black.withOpacity(0.40),
+                  offset: Offset(4.0, 8.0),
+                ),
+              ],
+            ),
+          ),
+          Container(height: 18),
+          Text(
+            'Tetap aman bantu ringankan beban \n#bersamakitabisa #dirumahaja',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.muli(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Row getImageRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        AppImages.homePerson.toSvgPicture(),
-        Container(width: 36),
-      ],
+  Widget getNextButton() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: AnimatedSize(
+        duration: Duration(milliseconds: 800),
+        curve: Curves.decelerate,
+        child: Container(
+          height: _heightButton,
+          width: _widthButton,
+          margin: EdgeInsets.all(16),
+          child: RaisedButton(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text('Ayo Ikuti!'),
+            textColor: Colors.white,
+            color: HexColor('FDA624'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (ctx) => RegisterScreen()),
+              );
+            },
+          ),
+        ),
+        vsync: this,
+      ),
+    );
+  }
+
+  Align getLoadingKit() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 84,
+        child: SpinKitChasingDots(
+          size: 30,
+          itemBuilder: (BuildContext context, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: index.isEven ? HexColor('CCE7FF') : HexColor('FDA624'),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

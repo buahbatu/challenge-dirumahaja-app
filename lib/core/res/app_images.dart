@@ -38,8 +38,56 @@ extension AppImages on String {
     );
   }
 
-  static final pinkBg = 'assets/svg/pink-bg.svg';
-  static final yellowBg = 'assets/svg/yellow-bg.svg';
-  static final blueBg = 'assets/svg/blue-bg.svg';
-  static final homePerson = 'assets/svg/home-person.svg';
+  Image toPngImage({
+    Key key,
+    AssetBundle bundle,
+    ImageFrameBuilder frameBuilder,
+    String semanticLabel,
+    bool excludeFromSemantics = false,
+    double scale,
+    double width,
+    double height,
+    Color color,
+    BlendMode colorBlendMode,
+    BoxFit fit,
+    Alignment alignment = Alignment.center,
+    ImageRepeat repeat = ImageRepeat.noRepeat,
+    Rect centerSlice,
+    bool matchTextDirection = false,
+    bool gaplessPlayback = false,
+    String package,
+    FilterQuality filterQuality = FilterQuality.low,
+    int cacheWidth,
+    int cacheHeight,
+  }) {
+    return Image.asset(
+      this,
+      frameBuilder: frameBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
+      width: width,
+      height: height,
+      color: color,
+      colorBlendMode: colorBlendMode,
+      fit: fit,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      package: package,
+      filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  // svg
+  static final arrowLeftSvg = 'assets/svg/arrow-left.svg';
+
+  // png
+  static final homeBgPng = 'assets/png/home-bg.png';
+  static final homeBgSmallPng = 'assets/png/home-bg-small.png';
+  static final cloudBgPng = 'assets/png/cloud-bg.png';
 }
