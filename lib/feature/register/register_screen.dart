@@ -1,5 +1,6 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/address_screen.dart';
 import 'package:dirumahaja/feature/register/challenger_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
@@ -46,22 +47,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Align getBackButton() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(height: 32),
-          RaisedButton(
-            onPressed: onBackClick,
-            padding: const EdgeInsets.all(8),
-            color: Colors.white,
-            shape: CircleBorder(),
-            child: AppImages.arrowLeftSvg.toSvgPicture(),
-          ),
-        ],
-      ),
+  Widget getBackButton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(height: 32),
+        RaisedButton(
+          onPressed: onBackClick,
+          color: Colors.white,
+          shape: CircleBorder(),
+          child: AppImages.arrowLeftSvg.toSvgPicture(),
+        ),
+      ],
     );
   }
 
@@ -80,13 +77,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void onNextClick() {
-    controller.animateToPage(
-      (currentPage + 1 < RegisterScreen.maxPage)
-          ? currentPage + 1
-          : currentPage,
-      duration: Duration(seconds: 1),
-      curve: Curves.easeInOut,
-    );
+    if (currentPage + 1 < RegisterScreen.maxPage) {
+      controller.animateToPage(
+        currentPage + 1,
+        duration: Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+        (r) => false,
+      );
+    }
   }
 
   void onBackClick() {

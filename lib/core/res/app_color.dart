@@ -15,4 +15,16 @@ extension AppColor on String {
     end: Alignment.bottomCenter,
     colors: [HexColor('CCE7FF'), HexColor('E7F3FF')],
   );
+
+  static final skyNoonGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [HexColor('FFD0C6'), HexColor('FFFEE7')],
+  );
+
+  static final skyNightGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [HexColor('1F318E'), HexColor('DDA5E7')],
+  );
 }

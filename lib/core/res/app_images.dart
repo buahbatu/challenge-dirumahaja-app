@@ -85,10 +85,13 @@ extension AppImages on String {
 
   // svg
   static final arrowLeftSvg = 'assets/svg/arrow-left.svg';
+  static final bellSvg = 'assets/svg/bell.svg';
+  static final helpSvg = 'assets/svg/help.svg';
 
   // png
   static final homeBgPng = 'assets/png/home-bg.png';
   static final homeBgSmallPng = 'assets/png/home-bg-small.png';
+  static final homeBgMediumPng = 'assets/png/home-bg-medium.png';
   static final cloudBgPng = 'assets/png/cloud-bg.png';
   static final cloudBg2Png = 'assets/png/cloud-bg-2.png';
 }
