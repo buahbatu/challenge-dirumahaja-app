@@ -1,6 +1,7 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/register/address_screen.dart';
+import 'package:dirumahaja/feature/register/challenger_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class RegisterScreen extends StatefulWidget {
   final pages = [
     ProfileScreen(),
     AddressScreen(),
-    RuleBookScreen(),
+    ChallengerScreen(),
     RuleBookScreen(),
   ];
 }
@@ -47,13 +48,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Align getBackButton() {
     return Align(
-      alignment: Alignment(-1, -0.9),
-      child: RaisedButton(
-        onPressed: onBackClick,
-        padding: const EdgeInsets.all(8),
-        color: Colors.white,
-        shape: CircleBorder(),
-        child: AppImages.arrowLeftSvg.toSvgPicture(),
+      alignment: Alignment.topLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(height: 32),
+          RaisedButton(
+            onPressed: onBackClick,
+            padding: const EdgeInsets.all(8),
+            color: Colors.white,
+            shape: CircleBorder(),
+            child: AppImages.arrowLeftSvg.toSvgPicture(),
+          ),
+        ],
       ),
     );
   }

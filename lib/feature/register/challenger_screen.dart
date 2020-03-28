@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddressScreen extends StatelessWidget {
+class ChallengerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -30,7 +30,7 @@ class AddressScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Rumah mu dimana?',
+            'Siapa yang nantang kamu?',
             style: GoogleFonts.raleway(
               fontSize: 24,
               fontWeight: FontWeight.w800,
@@ -39,7 +39,7 @@ class AddressScreen extends StatelessWidget {
           ),
           Container(height: 8),
           Text(
-            'Biar kami bisa ingetin kalo kamu keluar rumah',
+            'Kasih tau dia kalo kamu juga bisa',
             style: GoogleFonts.muli(
               fontSize: 12,
               color: AppColor.bodyColor.toHexColor(),
@@ -60,7 +60,7 @@ class AddressScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Koordinat Rumah',
+              'Username penantang',
               style: GoogleFonts.raleway(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
@@ -75,7 +75,7 @@ class AddressScreen extends StatelessWidget {
                   horizontal: 12,
                   vertical: 6,
                 ),
-                hintText: '247.00032, 12.00023',
+                hintText: 'Isi username teman mu...',
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -89,8 +89,14 @@ class AddressScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(height: 16),
-            ...getMapSections(),
+            Container(height: 8),
+            Text(
+              'Kosongkan jika tidak ada',
+              style: GoogleFonts.muli(
+                fontSize: 12,
+                color: AppColor.bodyColor.toHexColor(),
+              ),
+            ),
           ],
         ),
       ),

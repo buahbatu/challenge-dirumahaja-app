@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/feature/splash/splash_screen.dart';
 import 'package:dirumahaja/core/tools/app_loader.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Challenge #dirumahaja',
+      theme: ThemeData(accentColor: AppColor.titleColor.toHexColor()),
       home: SplashScreen(),
     );
   }
