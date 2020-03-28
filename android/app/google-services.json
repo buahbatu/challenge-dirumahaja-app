@@ -1,56 +1,83 @@
 {
-    "project_info": {
-        "project_number": "626272285771",
-        "firebase_url": "https://simpati-sistem-anti-stunting.firebaseio.com",
-        "project_id": "simpati-sistem-anti-stunting",
-        "storage_bucket": "simpati-sistem-anti-stunting.appspot.com"
-    },
-    "client": [{
-            "client_info": {
-                "mobilesdk_app_id": "1:626272285771:android:7ab8e35f4bb297f39b49ce",
-                "android_client_info": {
-                    "package_name": "com.buahbatu.dirumahaja"
-                }
-            },
-            "oauth_client": [{
-                "client_id": "626272285771-hveg0jodn6ea7p8hmifhcb9cce6qk4kf.apps.googleusercontent.com",
-                "client_type": 3
-            }],
-            "api_key": [{
-                "current_key": "AIzaSyC72pWLRbjkKEeoaTUWMFaUvg-Wxv-Eb3g"
-            }],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [{
-                        "client_id": "626272285771-hveg0jodn6ea7p8hmifhcb9cce6qk4kf.apps.googleusercontent.com",
-                        "client_type": 3
-                    }]
-                }
-            }
-        },
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:626272285771:android:89beb9cc703c27299b49ce",
-                "android_client_info": {
-                    "package_name": "com.buahbatu.dirumahaja.debug"
-                }
-            },
-            "oauth_client": [{
-                "client_id": "626272285771-hveg0jodn6ea7p8hmifhcb9cce6qk4kf.apps.googleusercontent.com",
-                "client_type": 3
-            }],
-            "api_key": [{
-                "current_key": "AIzaSyC72pWLRbjkKEeoaTUWMFaUvg-Wxv-Eb3g"
-            }],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [{
-                        "client_id": "626272285771-hveg0jodn6ea7p8hmifhcb9cce6qk4kf.apps.googleusercontent.com",
-                        "client_type": 3
-                    }]
-                }
-            }
+  "project_info": {
+    "project_number": "590308030127",
+    "firebase_url": "https://dirumahaja-challenge.firebaseio.com",
+    "project_id": "dirumahaja-challenge",
+    "storage_bucket": "dirumahaja-challenge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590308030127:android:d79100e0659c13ea69c65a",
+        "android_client_info": {
+          "package_name": "com.buahbatu.dirumahaja"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6xgjj8n0Ua-KzssTtkptO3WuN2UWXp-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "590308030127-prdik1rkjp5j3o4s2p3bm7gv746v9cg5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.buahbatu.dirumahaja.debug"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590308030127:android:d315ec1a89a52bec69c65a",
+        "android_client_info": {
+          "package_name": "com.buahbatu.dirumahaja.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6xgjj8n0Ua-KzssTtkptO3WuN2UWXp-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "590308030127-prdik1rkjp5j3o4s2p3bm7gv746v9cg5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.buahbatu.dirumahaja.debug"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }
