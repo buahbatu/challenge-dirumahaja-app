@@ -1,5 +1,6 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/feature/register/address_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,8 @@ class RegisterScreen extends StatefulWidget {
   static const int maxPage = 4;
 
   final pages = [
-    RuleBookScreen(),
     ProfileScreen(),
+    AddressScreen(),
     RuleBookScreen(),
     RuleBookScreen(),
   ];
@@ -28,7 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         width: double.infinity,
         decoration: BoxDecoration(gradient: AppColor.skyGradient),
         child: Stack(
-          alignment: Alignment.bottomCenter,
           children: <Widget>[
             ...getBackgrounds(),
             PageView.builder(
@@ -37,9 +37,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               controller: controller,
               onPageChanged: onPageChanged,
             ),
+            getBackButton(),
             getNextButton()
           ],
         ),
+      ),
+    );
+  }
+
+  Align getBackButton() {
+    return Align(
+      alignment: Alignment(-1, -0.9),
+      child: RaisedButton(
+        onPressed: onBackClick,
+        padding: const EdgeInsets.all(8),
+        color: Colors.white,
+        shape: CircleBorder(),
+        child: AppImages.arrowLeftSvg.toSvgPicture(),
       ),
     );
   }
@@ -68,9 +82,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  void onBackClick() {
+    if (currentPage - 1 >= 0) {
+      controller.animateToPage(
+        currentPage - 1,
+        duration: Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   List<Widget> getBackgrounds() {
     return [
       AppImages.homeBgSmallPng.toPngImage(
+        width: double.infinity,
+        fit: BoxFit.fitWidth,
+      ),
+      AppImages.cloudBgPng.toPngImage(
         width: double.infinity,
         fit: BoxFit.fitWidth,
       ),

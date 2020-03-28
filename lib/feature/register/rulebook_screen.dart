@@ -54,7 +54,7 @@ class RuleBookScreen extends StatelessWidget {
             ...getRules()
                 .map((f) => Text(f,
                     style: GoogleFonts.muli(
-                      color: HexColor('666666'),
+                      color: AppColor.bodyColor.toHexColor(),
                     )))
                 .toList(),
             getPrivacyRow()
@@ -68,12 +68,12 @@ class RuleBookScreen extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: 'baca  ',
-        style: GoogleFonts.muli(color: HexColor('666666')),
+        style: GoogleFonts.muli(color: AppColor.bodyColor.toHexColor()),
         children: [
           getPrivacyPolicy(),
           TextSpan(
             text: ' Lebih Lanjut',
-            style: GoogleFonts.muli(color: HexColor('666666')),
+            style: GoogleFonts.muli(color: AppColor.bodyColor.toHexColor()),
           ),
         ],
       ),

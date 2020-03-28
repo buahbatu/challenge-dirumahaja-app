@@ -3,45 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileScreen extends StatelessWidget {
+class AddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 52),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(height: 64),
-          getTitle(),
-          getRuleBox(),
-        ],
-      ),
-    );
-  }
-
-  Widget getTitle() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
           Text(
             'Kenalan Dulu Dong',
+            textAlign: TextAlign.center,
             style: GoogleFonts.raleway(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: AppColor.titleColor.toHexColor(),
             ),
           ),
-          Container(height: 8),
-          Text(
-            'Tak kenal maka tak sayang, ayo kenalan dulu',
-            style: GoogleFonts.muli(
-              fontSize: 12,
-              color: AppColor.bodyColor.toHexColor(),
-            ),
-          ),
+          Container(height: 32),
+          getRuleBox(),
         ],
       ),
     );
