@@ -1,5 +1,8 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/core/tools/app_preference.dart';
+import 'package:dirumahaja/feature/dashboard/dshboard_screen.dart';
+import 'package:dirumahaja/feature/rulebook/rulebook_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +17,29 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final AppPreferance pref;
+
+  _SplashScreenState({AppPreferance pref})
+      : this.pref = pref ?? AppPreferance.get();
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkLoginState();
+  }
+
+  void checkLoginState() async {
+    await Future.delayed(Duration(seconds: 2));
+    final isLogin = await pref.loadData('isLogin', defaultValue: false);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (ctx) => isLogin ? DashboardScreen() : RuleBookScreen(),
+      ),
+      (r) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     AppImages.blueBg.toSvgPicture();
