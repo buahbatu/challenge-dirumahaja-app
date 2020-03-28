@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               fontWeight: FontWeight.w800,
             ),
           ),
-          color: HexColor('FDA624'),
+          color: AppColor.buttonColor.toHexColor(),
           onPressed: onNextClick,
         ),
       ),

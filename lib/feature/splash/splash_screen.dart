@@ -174,7 +174,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             child: Text('Ayo Ikuti!'),
             textColor: Colors.white,
-            color: HexColor('FDA624'),
+            color: AppColor.buttonColor.toHexColor(),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (ctx) => RegisterScreen()),
@@ -198,7 +198,9 @@ class _SplashScreenState extends State<SplashScreen>
             return DecoratedBox(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: index.isEven ? HexColor('CCE7FF') : HexColor('FDA624'),
+                color: index.isEven
+                    ? HexColor('CCE7FF')
+                    : AppColor.buttonColor.toHexColor(),
               ),
             );
           },

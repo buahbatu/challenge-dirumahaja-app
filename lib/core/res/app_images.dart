@@ -94,4 +94,5 @@ extension AppImages on String {
   static final homeBgMediumPng = 'assets/png/home-bg-medium.png';
   static final cloudBgPng = 'assets/png/cloud-bg.png';
   static final cloudBg2Png = 'assets/png/cloud-bg-2.png';
+  static final heroPng = 'assets/png/hero.png';
 }

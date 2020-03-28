@@ -9,6 +9,7 @@ extension AppColor on String {
   static final titleColor = '0165C0';
   static final bodyColor = '666666';
   static final greyBgColor = 'F5F5F5';
+  static final buttonColor = 'FDA624';
 
   static final skyGradient = LinearGradient(
     begin: Alignment.topCenter,
