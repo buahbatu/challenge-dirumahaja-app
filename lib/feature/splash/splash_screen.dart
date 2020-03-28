@@ -2,7 +2,7 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/tools/app_preference.dart';
 import 'package:dirumahaja/feature/dashboard/dshboard_screen.dart';
-import 'package:dirumahaja/feature/rulebook/rulebook_screen.dart';
+import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final isLogin = await pref.loadData('isLogin', defaultValue: false);
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (ctx) => isLogin ? DashboardScreen() : RuleBookScreen(),
+        builder: (ctx) => isLogin ? DashboardScreen() : RegisterScreen(),
       ),
       (r) => false,
     );
