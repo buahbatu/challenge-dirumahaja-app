@@ -1,5 +1,6 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/feature/activity/activity_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -101,35 +102,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
               elevation: 2,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: <Widget>[
-                    AppImages.productivePng.toPngImage(),
-                    Container(height: 16),
-                    Text(
-                      'Mari Produktif',
-                      style: GoogleFonts.muli(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.titleColor.toHexColor(),
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => ActivityScreen()),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: <Widget>[
+                      AppImages.productivePng.toPngImage(),
+                      Container(height: 16),
+                      Text(
+                        'Mari Produktif',
+                        style: GoogleFonts.muli(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.titleColor.toHexColor(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
           Container(width: 8),
           Expanded(
-            child: InkWell(
-              onTap: () {
-                launch('https://www.covid19.bnpb.go.id/situasi-virus-corona/');
-              },
-              child: Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: InkWell(
+                onTap: () {
+                  launch(
+                      'https://www.covid19.bnpb.go.id/situasi-virus-corona/');
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(

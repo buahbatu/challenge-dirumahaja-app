@@ -91,6 +91,17 @@ extension AppImages on String {
   static final nightShadeSvg = 'assets/svg/shade-night.svg';
   static final noonShadeSvg = 'assets/svg/shade-night.svg';
   static final assestmentSvg = 'assets/svg/assestment.svg';
+  // TODO: move to configs - productivy
+  static final cariCuanSvg = 'assets/svg/cari-cuan.svg';
+  static final donasiSvg = 'assets/svg/donasi.svg';
+  static final kajianSvg = 'assets/svg/kajian.svg';
+  static final learnCodeSvg = 'assets/svg/learn-code.svg';
+  static final learnDesignSvg = 'assets/svg/learn-design.svg';
+  static final museumVitualSvg = 'assets/svg/museum-virtual.svg';
+  static final nontonKonserSvg = 'assets/svg/nonton-konser.svg';
+  static final readBookSvg = 'assets/svg/read-book.svg';
+  static final shoppingSvg = 'assets/svg/shopping.svg';
+  static final videoPodcastSvg = 'assets/svg/video-podcast.svg';
 
   // png
   static final homeBgPng = 'assets/png/home-bg.png';
