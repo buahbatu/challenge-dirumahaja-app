@@ -172,7 +172,14 @@ class _SplashScreenState extends State<SplashScreen>
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text('Ayo Ikuti!'),
+            child: Text(
+              'Ayo Ikuti!',
+              style: GoogleFonts.muli(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
             textColor: Colors.white,
             color: AppColor.buttonColor.toHexColor(),
             onPressed: () {

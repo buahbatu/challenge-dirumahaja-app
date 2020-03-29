@@ -124,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: InkWell(
               onTap: () {
-                launch('https://www.covid19.go.id/situasi-virus-corona/');
+                launch('https://www.covid19.bnpb.go.id/situasi-virus-corona/');
               },
               child: Card(
                 elevation: 2,
@@ -420,7 +420,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           onPressed: () {},
           color: Colors.white,
           shape: CircleBorder(),
-          child: AppImages.helpSvg.toSvgPicture(),
+          child: AppImages.bellSvg.toSvgPicture(),
         ),
         Container(
           height: 12,
