@@ -52,9 +52,11 @@ android {
         release {
             minifyEnabled true
             useProguard true
+            resValue "string", "app_name", "#dirumahaja challenge"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            resValue "string", "app_name", "#dirumahaja debug"
             debuggable true
             applicationIdSuffix '.debug'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
