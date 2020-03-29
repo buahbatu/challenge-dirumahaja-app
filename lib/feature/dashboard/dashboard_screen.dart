@@ -3,6 +3,7 @@ import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
 import 'package:dirumahaja/feature/friend/friend_screen.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
+import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
@@ -139,8 +140,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   borderRadius: BorderRadius.circular(8)),
               child: InkWell(
                 onTap: () {
-                  launch(
-                      'https://www.covid19.bnpb.go.id/situasi-virus-corona/');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => InformationScreen()),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
