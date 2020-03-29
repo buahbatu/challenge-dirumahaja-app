@@ -56,7 +56,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onPressed: onBackClick,
           color: Colors.white,
           shape: CircleBorder(),
-          child: AppImages.arrowLeftSvg.toSvgPicture(),
+          child: Icon(
+            Icons.arrow_back,
+            color: AppColor.titleColor.toHexColor(),
+          ),
         ),
       ],
     );

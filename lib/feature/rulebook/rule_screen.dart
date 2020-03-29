@@ -16,8 +16,8 @@ class RuleScreen extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             ...getBackgrounds(),
-            getBackButton(context),
             getContent(),
+            getBackButton(context),
           ],
         ),
       ),
@@ -35,7 +35,10 @@ class RuleScreen extends StatelessWidget {
           },
           color: Colors.white,
           shape: CircleBorder(),
-          child: AppImages.arrowLeftSvg.toSvgPicture(),
+          child: Icon(
+            Icons.arrow_back,
+            color: AppColor.titleColor.toHexColor(),
+          ),
         ),
       ],
     );
@@ -120,7 +123,7 @@ class RuleScreen extends StatelessWidget {
                 text: 'All Icon by ',
                 children: [
                   TextSpan(
-                    text: 'flaticon',
+                    text: 'Flaticon',
                     style: GoogleFonts.muli(
                       color: Colors.black87,
                       fontWeight: FontWeight.w800,
@@ -158,7 +161,7 @@ class RuleScreen extends StatelessWidget {
                 text: 'Priksa gejala by ',
                 children: [
                   TextSpan(
-                    text: 'prixa.ai',
+                    text: 'Prixa.ai',
                     style: GoogleFonts.muli(
                       color: Colors.black87,
                       fontWeight: FontWeight.w800,
@@ -172,12 +175,13 @@ class RuleScreen extends StatelessWidget {
                 style: GoogleFonts.muli(color: Colors.black87),
               ),
             ),
+            Container(height: 12),
             RichText(
               text: TextSpan(
                 text: 'List Kegiatan Produktif by ',
                 children: [
                   TextSpan(
-                    text: 'sebostudio',
+                    text: 'Sebostudio',
                     style: GoogleFonts.muli(
                       color: Colors.black87,
                       fontWeight: FontWeight.w800,

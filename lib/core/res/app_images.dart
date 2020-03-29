@@ -84,10 +84,10 @@ extension AppImages on String {
   }
 
   // svg
-  static final arrowLeftSvg = 'assets/svg/arrow-left.svg';
   static final bellSvg = 'assets/svg/bell.svg';
   static final helpSvg = 'assets/svg/help.svg';
   static final pinSvg = 'assets/svg/pin.svg';
+  static final energySvg = 'assets/svg/energy.svg';
   static final nightShadeSvg = 'assets/svg/shade-night.svg';
   static final noonShadeSvg = 'assets/svg/shade-night.svg';
   static final assestmentSvg = 'assets/svg/assestment.svg';

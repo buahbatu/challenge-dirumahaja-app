@@ -1,6 +1,7 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
+import 'package:dirumahaja/feature/friend/friend_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -202,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AppImages.pinSvg.toSvgPicture(width: 52),
             Column(
               children: <Widget>[
-                AppImages.heroPng.toPngImage(),
+                AppImages.heroPng.toPngImage(width: 42),
                 Container(height: 16),
               ],
             ),
@@ -252,36 +253,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Daftar Teman',
+            'Teman Challenge',
             style: GoogleFonts.muli(
               fontSize: 12,
               color: AppColor.bodyColor.toHexColor(),
             ),
           ),
           Container(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              createImage(AppImages.heroPng),
-              createImage(AppImages.heroPng),
-              createImage(AppImages.heroPng),
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: HexColor('FFC010'),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '+3',
-                  style: GoogleFonts.muli(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.6),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (ctx) => FriendScreen()),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                createImage(AppImages.heroPng),
+                createImage(AppImages.heroPng),
+                createImage(AppImages.heroPng),
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: HexColor('FFC010'),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '+3',
+                    style: GoogleFonts.muli(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black.withOpacity(0.6),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Container(height: 16),
           InkWell(

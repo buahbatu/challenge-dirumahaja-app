@@ -25,8 +25,8 @@ class ActivityScreen extends StatelessWidget {
       body: GridView.count(
         crossAxisCount: 2,
         padding: EdgeInsets.all(16),
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
         children: resources.map((r) => createItem(r)).toList(),
       ),
     );
@@ -34,6 +34,7 @@ class ActivityScreen extends StatelessWidget {
 
   Card createItem(Activity a) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: InkWell(
         onTap: () => launch(a.resPath),
         child: Column(
