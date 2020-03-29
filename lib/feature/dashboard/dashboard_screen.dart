@@ -6,6 +6,7 @@ import 'package:dirumahaja/feature/friend/share_screen.dart';
 import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
+import 'package:dirumahaja/feature/status/status_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -234,17 +235,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
       color: HexColor('F0F6FB'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.all(23.0),
-      child: Row(
-        children: <Widget>[
-          Flexible(
-            flex: 9,
-            child: getDayCount(),
-          ),
-          Flexible(
-            flex: 7,
-            child: getFriendCount(),
-          ),
-        ],
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => StatusScreen(),
+          ));
+        },
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              flex: 9,
+              child: getDayCount(),
+            ),
+            Flexible(
+              flex: 7,
+              child: getFriendCount(),
+            ),
+          ],
+        ),
       ),
     );
   }
