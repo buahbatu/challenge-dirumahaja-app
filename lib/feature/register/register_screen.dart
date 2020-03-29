@@ -105,13 +105,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<Widget> getBackgrounds() {
     return [
-      AppImages.homeBgSmallPng.toPngImage(
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: AppImages.homeBgMediumPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
-      AppImages.cloudBgPng.toPngImage(
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
+      Align(
+        alignment: Alignment.topCenter,
+        child: AppImages.cloudBgPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
     ];
   }

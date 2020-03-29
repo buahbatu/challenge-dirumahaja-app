@@ -4,6 +4,7 @@ import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -12,11 +13,37 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
+  void initState() {
+    super.initState();
+    checkTimeBackground();
+  }
+
+  Gradient skyGradient = AppColor.skyGradient;
+  Gradient shadeGradient = AppColor.shadeNoonGradient;
+  Color userNameColor = Colors.black;
+
+  void checkTimeBackground() {
+    setState(() {
+      final hour = DateTime.now().hour;
+      if (hour >= 6 && hour < 14) {
+        skyGradient = AppColor.skyGradient;
+      } else if (hour >= 14 && hour < 19) {
+        skyGradient = AppColor.skyNoonGradient;
+        shadeGradient = AppColor.shadeNoonGradient;
+      } else {
+        skyGradient = AppColor.skyNightGradient;
+        shadeGradient = AppColor.shadeNightGradient;
+        userNameColor = Colors.white;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(gradient: AppColor.skyGradient),
+        decoration: BoxDecoration(gradient: skyGradient),
         child: Stack(
           children: <Widget>[
             ...getBackgrounds(),
@@ -33,6 +60,145 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Container(height: 32),
         getTopbar(),
         getStatusBoard(),
+        getUserPin(),
+        Expanded(child: Container()),
+        getMainMenu(),
+        Container(height: 10),
+        getPrixaButton(),
+        Container(height: 16),
+      ],
+    );
+  }
+
+  FlatButton getPrixaButton() {
+    return FlatButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: Colors.white),
+      ),
+      child: Text(
+        'Periksa Gejala with Prixa.ai',
+        style: GoogleFonts.muli(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      onPressed: () {
+        launch('https://prixa.ai/corona');
+      },
+    );
+  }
+
+  Widget getMainMenu() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Expanded(
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: <Widget>[
+                    AppImages.productivePng.toPngImage(),
+                    Container(height: 16),
+                    Text(
+                      'Mari Produktif',
+                      style: GoogleFonts.muli(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.titleColor.toHexColor(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(width: 8),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                launch('https://www.covid19.go.id/situasi-virus-corona/');
+              },
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: <Widget>[
+                      AppImages.assestmentSvg.toSvgPicture(),
+                      Container(height: 16),
+                      Text(
+                        'Update Corona',
+                        style: GoogleFonts.muli(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.titleColor.toHexColor(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget getUserPin() {
+    return Column(
+      children: <Widget>[
+        Container(height: 32),
+        Text(
+          'NisaBucinSelalu',
+          style: GoogleFonts.muli(color: userNameColor),
+        ),
+        Container(height: 2),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              height: 8,
+              width: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: HexColor('8EC13F'),
+              ),
+            ),
+            Container(width: 4),
+            Text(
+              'Bandung',
+              style: GoogleFonts.raleway(
+                color: userNameColor,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        Container(height: 8),
+        Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            AppImages.pinSvg.toSvgPicture(width: 52),
+            Column(
+              children: <Widget>[
+                AppImages.heroPng.toPngImage(),
+                Container(height: 16),
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -101,7 +267,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Text(
                   '+3',
                   style: GoogleFonts.muli(
-                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: Colors.black.withOpacity(0.6),
                   ),
@@ -207,14 +372,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<Widget> getBackgrounds() {
     return [
-      AppImages.homeBgMediumPng.toPngImage(
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: AppImages.homeBgMediumPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
-      AppImages.cloudBgPng.toPngImage(
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
+      Align(
+        alignment: Alignment.topCenter,
+        child: AppImages.cloudBgPng.toPngImage(
+          width: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
       ),
+      if (skyGradient == AppColor.skyNoonGradient)
+        AppImages.noonShadeSvg.toSvgPicture(
+          width: double.infinity,
+          fit: BoxFit.fill,
+        ),
+      if (skyGradient == AppColor.skyNightGradient)
+        AppImages.nightShadeSvg.toSvgPicture(
+          width: double.infinity,
+          fit: BoxFit.fill,
+        ),
     ];
   }
 

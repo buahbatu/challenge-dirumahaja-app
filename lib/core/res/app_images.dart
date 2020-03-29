@@ -87,6 +87,10 @@ extension AppImages on String {
   static final arrowLeftSvg = 'assets/svg/arrow-left.svg';
   static final bellSvg = 'assets/svg/bell.svg';
   static final helpSvg = 'assets/svg/help.svg';
+  static final pinSvg = 'assets/svg/pin.svg';
+  static final nightShadeSvg = 'assets/svg/shade-night.svg';
+  static final noonShadeSvg = 'assets/svg/shade-night.svg';
+  static final assestmentSvg = 'assets/svg/assestment.svg';
 
   // png
   static final homeBgPng = 'assets/png/home-bg.png';
@@ -95,4 +99,5 @@ extension AppImages on String {
   static final cloudBgPng = 'assets/png/cloud-bg.png';
   static final cloudBg2Png = 'assets/png/cloud-bg-2.png';
   static final heroPng = 'assets/png/hero.png';
+  static final productivePng = 'assets/png/productive.png';
 }

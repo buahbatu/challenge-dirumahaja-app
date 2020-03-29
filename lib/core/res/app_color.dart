@@ -22,10 +22,20 @@ extension AppColor on String {
     end: Alignment.bottomCenter,
     colors: [HexColor('FFD0C6'), HexColor('FFFEE7')],
   );
+  static final shadeNoonGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [HexColor('FFFEE7'), HexColor('FFD0C6')],
+  );
 
   static final skyNightGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [HexColor('1F318E'), HexColor('DDA5E7')],
+  );
+  static final shadeNightGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [HexColor('DDA5E7'), HexColor('DDA5E7'), HexColor('1F318E')],
   );
 }
