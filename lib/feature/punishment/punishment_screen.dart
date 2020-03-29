@@ -1,5 +1,6 @@
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/result/entity/entity_punishment.dart';
+import 'package:dirumahaja/feature/punishment/punishment_check_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +42,7 @@ class PunishmentScreen extends StatelessWidget {
               separatorBuilder: (ctx, i) => Container(height: 12),
               itemCount: resources.length,
               padding: EdgeInsets.all(16),
-              itemBuilder: (ctx, i) => createItem(resources[i]),
+              itemBuilder: (ctx, i) => createItem(resources[i], context),
             ),
           ),
         ],
@@ -49,13 +50,13 @@ class PunishmentScreen extends StatelessWidget {
     );
   }
 
-  Widget createItem(Punishment n) {
+  Widget createItem(Punishment n, BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(8),
       color: Colors.white,
       elevation: 2,
       child: InkWell(
-        onTap: () {},
+        onTap: () => goToCheck(n, context),
         child: Column(
           children: <Widget>[
             Padding(
@@ -81,6 +82,13 @@ class PunishmentScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void goToCheck(Punishment n, BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (ctx) => PunishmentCheckScreen(n)),
+    );
+    ;
   }
 
   final resources = [
