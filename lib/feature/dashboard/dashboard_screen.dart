@@ -235,24 +235,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       color: HexColor('F0F6FB'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.all(23.0),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => StatusScreen(),
-          ));
-        },
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              flex: 9,
-              child: getDayCount(),
-            ),
-            Flexible(
-              flex: 7,
-              child: getFriendCount(),
-            ),
-          ],
-        ),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            flex: 9,
+            child: getDayCount(),
+          ),
+          Flexible(
+            flex: 7,
+            child: getFriendCount(),
+          ),
+        ],
       ),
     );
   }
@@ -351,49 +344,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Container getDayCount() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-      ),
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Lama kamu di rumah',
-            style: GoogleFonts.muli(
-              fontSize: 12,
-              color: AppColor.bodyColor.toHexColor(),
-            ),
-          ),
-          Container(height: 4),
-          Text(
-            '14 Hari',
-            style: GoogleFonts.raleway(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: AppColor.titleColor.toHexColor(),
-            ),
-          ),
-          Container(height: 16),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: AppColor.buttonColor.toHexColor(),
-            ),
-            child: Text(
-              'Corona Hero',
-              style: GoogleFonts.raleway(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+  Widget getDayCount() {
+    return Material(
+      borderRadius: BorderRadius.circular(8),
+      color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => StatusScreen(),
+          ));
+        },
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Lama kamu di rumah',
+                style: GoogleFonts.muli(
+                  fontSize: 12,
+                  color: AppColor.bodyColor.toHexColor(),
+                ),
               ),
-            ),
-          )
-        ],
+              Container(height: 4),
+              Text(
+                '14 Hari',
+                style: GoogleFonts.raleway(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.titleColor.toHexColor(),
+                ),
+              ),
+              Container(height: 16),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColor.buttonColor.toHexColor(),
+                ),
+                child: Text(
+                  'Corona Hero',
+                  style: GoogleFonts.raleway(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
