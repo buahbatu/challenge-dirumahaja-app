@@ -3,6 +3,7 @@ import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
 import 'package:dirumahaja/feature/friend/friend_screen.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
+import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -447,7 +448,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       alignment: Alignment.center,
       children: <Widget>[
         RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (ctx) => NotificationScreen(),
+            ));
+          },
           color: Colors.white,
           shape: CircleBorder(),
           child: AppImages.bellSvg.toSvgPicture(),

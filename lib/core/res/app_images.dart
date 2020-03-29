@@ -102,6 +102,8 @@ extension AppImages on String {
   static final readBookSvg = 'assets/svg/read-book.svg';
   static final shoppingSvg = 'assets/svg/shopping.svg';
   static final videoPodcastSvg = 'assets/svg/video-podcast.svg';
+  static final tearSvg = 'assets/svg/tear.svg';
+  static final happySvg = 'assets/svg/happy.svg';
 
   // png
   static final homeBgPng = 'assets/png/home-bg.png';
