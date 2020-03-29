@@ -34,11 +34,11 @@ class NotificationScreen extends StatelessWidget {
   Card createItem(Notif n) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            Row(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
               children: <Widget>[
                 n.imagePath.toSvgPicture(width: 52),
                 Container(width: 16),
@@ -54,21 +54,32 @@ class NotificationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            if (n.action.isNotEmpty) Container(height: 12),
-            if (n.action.isNotEmpty)
-              InkWell(
+          ),
+          if (n.action.isNotEmpty)
+            Material(
+              color: AppColor.buttonColor.toHexColor(),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              ),
+              child: InkWell(
                 onTap: () {},
-                child: Text(
-                  parseAction(n.action),
-                  style: GoogleFonts.muli(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.buttonColor.toHexColor(),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  child: Text(
+                    parseAction(n.action),
+                    style: GoogleFonts.muli(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
