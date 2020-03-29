@@ -74,6 +74,7 @@ class RuleScreen extends StatelessWidget {
             getCreditsSection(),
             Container(height: 32),
             getAboutUsSection(),
+            Container(height: 32),
           ],
         ),
       ),

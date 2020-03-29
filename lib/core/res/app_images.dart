@@ -91,7 +91,7 @@ extension AppImages on String {
   static final nightShadeSvg = 'assets/svg/shade-night.svg';
   static final noonShadeSvg = 'assets/svg/shade-night.svg';
   static final assestmentSvg = 'assets/svg/assestment.svg';
-  // TODO: move to configs - productivy
+  // TODO: move to configs - productivity
   static final cariCuanSvg = 'assets/svg/cari-cuan.svg';
   static final donasiSvg = 'assets/svg/donasi.svg';
   static final kajianSvg = 'assets/svg/kajian.svg';
@@ -111,4 +111,6 @@ extension AppImages on String {
   static final cloudBg2Png = 'assets/png/cloud-bg-2.png';
   static final heroPng = 'assets/png/hero.png';
   static final productivePng = 'assets/png/productive.png';
+  static final playstorePng = 'assets/png/playstore.png';
+  static final appstorePng = 'assets/png/appstore.png';
 }

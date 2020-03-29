@@ -2,6 +2,7 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
 import 'package:dirumahaja/feature/friend/friend_screen.dart';
+import 'package:dirumahaja/feature/friend/share_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -170,7 +171,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Container(height: 32),
         Text(
-          'NisaBucinSelalu',
+          'RaviDewaBucin',
           style: GoogleFonts.muli(color: userNameColor),
         ),
         Container(height: 2),
@@ -307,25 +308,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => ShareScreen(
+                  'RaviDewaBucin',
+                  AppImages.heroPng,
+                ),
+              ));
+            },
           )
         ],
       ),
     );
   }
 
-  Container createImage(String path) {
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(path)),
-        shape: BoxShape.circle,
-        border: Border.all(
-          width: 2,
-          color: HexColor('8EC13F'),
+  Widget createImage(String path) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            border: Border.all(color: HexColor('8EC13F'), width: 2),
+          ),
         ),
-      ),
+        AppImages.heroPng.toPngImage(width: 24),
+      ],
     );
   }
 
@@ -382,7 +393,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       style: GoogleFonts.raleway(
         fontSize: 16,
         fontWeight: FontWeight.w800,
-        color: AppColor.titleColor.toHexColor(),
+        color: userNameColor == Colors.white
+            ? userNameColor
+            : AppColor.titleColor.toHexColor(),
       ),
     );
   }

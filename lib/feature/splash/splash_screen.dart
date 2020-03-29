@@ -89,7 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget getTextSection() {
-    // AnimatedSize()
     return Container(
       width: double.infinity,
       child: Column(
@@ -112,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
           Text(
-            'DI RUMAH AJA',
+            '#DIRUMAHAJA',
             textAlign: TextAlign.center,
             style: GoogleFonts.raleway(
               fontSize: 46,
