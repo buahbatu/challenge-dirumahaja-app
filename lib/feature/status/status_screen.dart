@@ -43,12 +43,12 @@ class _StatusScreenState extends State<StatusScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  widget.punishment.imagePath.toSvgPicture(
+                  AppImages.heroPng.toPngImage(
                     width: 150,
                   ),
                   Container(height: 24),
                   Text(
-                    widget.punishment.description,
+                    'Cek',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.muli(
                       fontSize: 22,
