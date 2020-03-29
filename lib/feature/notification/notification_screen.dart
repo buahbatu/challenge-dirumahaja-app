@@ -1,12 +1,18 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_friend.dart';
 import 'package:dirumahaja/core/result/entity/entity_notif.dart';
+import 'package:dirumahaja/feature/punishment/punishment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
+  @override
+  _NotificationScreenState createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +69,7 @@ class NotificationScreen extends StatelessWidget {
                 bottomRight: Radius.circular(8),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () => onActionClick(n.action),
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   alignment: Alignment.center,
@@ -84,11 +90,25 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
+  void onActionClick(String action) async {
+    if (isPunishmentAction(action)) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => PunishmentScreen(),
+      ));
+    } else {
+      launch(action);
+    }
+  }
+
+  bool isPunishmentAction(String action) {
+    return action == '/punishment';
+  }
+
   String parseAction(String action) {
-    if (action == '/punishment') {
+    if (isPunishmentAction(action)) {
       return 'Terima Hukuman';
     } else {
-      return action;
+      return 'Lihat Detail';
     }
   }
 
