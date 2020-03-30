@@ -1,6 +1,5 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -12,13 +11,14 @@ class StatusScreen extends StatefulWidget {
 }
 
 class _StatusScreenState extends State<StatusScreen> {
+  final bgColor = HexColor('F0F6FB');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: bgColor,
         title: Text(
           'Status Kamu',
           style: GoogleFonts.raleway(
@@ -33,95 +33,190 @@ class _StatusScreenState extends State<StatusScreen> {
           color: AppColor.titleColor.toHexColor(),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(36),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  getStatusBar(),
-                  Container(height: 16),
-                  createImage(AppImages.heroPng),
-                  Container(height: 24),
-                  getUserInfo(),
-                  Text(
-                    'kamu bisa ganti emblem mu saat ini dengan klik salah satu dari koleksi emblem kamu',
-                    style: GoogleFonts.muli(color: Colors.black87),
+      body: SingleChildScrollView(child: getContent()),
+    );
+  }
+
+  Column getContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            getUserInfo(),
+            Align(
+              child: createImage(AppImages.heroPng, 128, 8, HexColor('8EC13F')),
+              alignment: Alignment.topCenter,
+            ),
+          ],
+        ),
+        getBannerCard(),
+        Container(height: 16),
+        getEmblemHint(),
+        getOptions(),
+      ],
+    );
+  }
+
+  Padding getEmblemHint() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 34),
+      child: Text(
+        'Koleksi mu akan bertambah seiring bertambahnya hari, teman, ataupun energi mu. Ayo semangat!',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.muli(
+          fontSize: 14,
+          color: AppColor.bodyColor.toHexColor(),
+        ),
+      ),
+    );
+  }
+
+  Widget getOptions() {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 1.3,
+      padding: const EdgeInsets.all(16),
+      physics: NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        getOptionCard(),
+        getOptionCard(),
+        getOptionCard(),
+      ],
+    );
+  }
+
+  Widget getOptionCard() {
+    return Material(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 1,
+      child: InkWell(
+        onTap: () {},
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: <Widget>[
+              createImage(AppImages.heroPng, 64, 2, Colors.blue),
+              Container(height: 8),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColor.buttonColor.toHexColor(),
+                ),
+                child: Text(
+                  'Corona Hero',
+                  style: GoogleFonts.raleway(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
-                  Text(
-                    'Semua Emblem kamu',
-                    style: GoogleFonts.muli(color: Colors.black87),
-                  ),
-                  Text(
-                    'PahlawanPandemi',
-                    style: GoogleFonts.muli(color: Colors.black87),
-                  ),
-                  Container(height: 36),
-                ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getBannerCard() {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 90),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: HexColor('FF5C76'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
+            ),
+            Text(
+              'Koleksi Emblem kamu',
+              style: GoogleFonts.muli(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-        ],
+            Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget getUserInfo() {
-    return Container(
-      // padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: AppColor.buttonColor.toHexColor(),
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(height: 80),
-          Text(
-            'NisaBucinSelalu',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.muli(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      margin: const EdgeInsets.all(58),
+      elevation: 8,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            Container(height: 70),
+            getStatusBar(),
+            Container(height: 24),
+            Text(
+              'NisaBucinSelalu',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.muli(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.black.withOpacity(0.7),
+              ),
             ),
-          ),
-          Text(
-            'Bandung',
-            style: GoogleFonts.muli(color: Colors.black87),
-          ),
-          Text(
-            '19 Tahun',
-            style: GoogleFonts.muli(color: Colors.black87),
-          ),
-          Text(
-            'Perempuan',
-            style: GoogleFonts.muli(color: Colors.black87),
-          ),
-          Text(
-            '3',
-            style: GoogleFonts.muli(color: Colors.black87),
-          ),
-        ],
+            Text(
+              'Bandung',
+              style: GoogleFonts.muli(
+                fontSize: 18,
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            Container(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                AppImages.energySvg.toSvgPicture(width: 10),
+                Container(width: 6),
+                Text(
+                  '3',
+                  style: GoogleFonts.muli(color: Colors.black87),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget createImage(String path) {
+  Widget createImage(
+      String path, double size, double width, Color borderColor) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         Container(
-          width: 128,
-          height: 128,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: HexColor('8EC13F'), width: 8),
+            border: Border.all(color: borderColor, width: width),
           ),
         ),
-        path.toPngImage(width: 112),
+        path.toPngImage(width: size - 2 * width),
       ],
     );
   }
@@ -137,7 +232,7 @@ class _StatusScreenState extends State<StatusScreen> {
         'Corona Hero',
         style: GoogleFonts.raleway(
           color: Colors.white,
-          fontSize: 38,
+          fontSize: 32,
           fontWeight: FontWeight.w800,
         ),
       ),
