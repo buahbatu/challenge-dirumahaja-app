@@ -157,8 +157,7 @@ class _ShareScreenState extends State<ShareScreen> {
         ),
         Container(height: 12),
         Text(
-          // widget.username,
-          'ArchiPakboyIsdiningrat',
+          widget.username,
           style: GoogleFonts.raleway(
             fontSize: 28,
             fontWeight: FontWeight.w800,

@@ -1,6 +1,5 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_rule.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class _StatusScreenState extends State<StatusScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Hukuman',
+          'Status Kamu',
           style: GoogleFonts.raleway(
             color: AppColor.titleColor.toHexColor(),
             fontSize: 16,
@@ -38,97 +37,110 @@ class _StatusScreenState extends State<StatusScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            child: Padding(
+            child: Container(
               padding: const EdgeInsets.all(36),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  AppImages.heroPng.toPngImage(
-                    width: 150,
-                  ),
+                  getStatusBar(),
+                  Container(height: 16),
+                  createImage(AppImages.heroPng),
                   Container(height: 24),
+                  getUserInfo(),
                   Text(
-                    'Cek',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.muli(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    'kamu bisa ganti emblem mu saat ini dengan klik salah satu dari koleksi emblem kamu',
+                    style: GoogleFonts.muli(color: Colors.black87),
+                  ),
+                  Text(
+                    'Semua Emblem kamu',
+                    style: GoogleFonts.muli(color: Colors.black87),
+                  ),
+                  Text(
+                    'PahlawanPandemi',
+                    style: GoogleFonts.muli(color: Colors.black87),
                   ),
                   Container(height: 36),
-                  createItem(
-                    Rule('Jangan lupa gunakan hashtag #dirumahaja', false),
-                  ),
-                  createItem(
-                    Rule(
-                      'Setelah melaksanakan hukuman, status mu akan dimulai lagi dari 0',
-                      false,
-                    ),
-                  ),
                 ],
               ),
             ),
           ),
-          getButton(),
         ],
       ),
     );
   }
 
-  Row createItem(Rule rule) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          height: 10,
-          width: 10,
-          margin: const EdgeInsets.only(top: 4, right: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: HexColor('F9C126'),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            rule.content,
+  Widget getUserInfo() {
+    return Container(
+      // padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppColor.buttonColor.toHexColor(),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(height: 80),
+          Text(
+            'NisaBucinSelalu',
+            textAlign: TextAlign.center,
             style: GoogleFonts.muli(
-              color: Colors.black87,
-              fontWeight: rule.isBold ? FontWeight.w800 : null,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Container getButton() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          'Sudah Dilaksanakan',
-          style: GoogleFonts.muli(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
+          Text(
+            'Bandung',
+            style: GoogleFonts.muli(color: Colors.black87),
           ),
-        ),
-        // color: HexColor('9CD147'),
-        color: AppColor.buttonColor.toHexColor(),
-        onPressed: resetStatus,
+          Text(
+            '19 Tahun',
+            style: GoogleFonts.muli(color: Colors.black87),
+          ),
+          Text(
+            'Perempuan',
+            style: GoogleFonts.muli(color: Colors.black87),
+          ),
+          Text(
+            '3',
+            style: GoogleFonts.muli(color: Colors.black87),
+          ),
+        ],
       ),
     );
   }
 
-  void resetStatus() async {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-      (r) => false,
+  Widget createImage(String path) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Container(
+          width: 128,
+          height: 128,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            border: Border.all(color: HexColor('8EC13F'), width: 8),
+          ),
+        ),
+        path.toPngImage(width: 112),
+      ],
+    );
+  }
+
+  Widget getStatusBar() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppColor.buttonColor.toHexColor(),
+      ),
+      child: Text(
+        'Corona Hero',
+        style: GoogleFonts.raleway(
+          color: Colors.white,
+          fontSize: 38,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
     );
   }
 

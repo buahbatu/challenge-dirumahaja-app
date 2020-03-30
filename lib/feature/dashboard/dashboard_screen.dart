@@ -339,7 +339,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             border: Border.all(color: HexColor('8EC13F'), width: 2),
           ),
         ),
-        AppImages.heroPng.toPngImage(width: 24),
+        path.toPngImage(width: 24),
       ],
     );
   }
