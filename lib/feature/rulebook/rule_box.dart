@@ -8,7 +8,7 @@ class RuleBox extends StatelessWidget {
   final double height;
   const RuleBox({
     Key key,
-    this.height = 400,
+    this.height = 420,
   }) : super(key: key);
 
   @override
@@ -40,7 +40,7 @@ class RuleBox extends StatelessWidget {
         false,
       ),
       Rule(
-        'Kamu akan memulai dengan 1 energi ',
+        'Kamu akan memulai dengan 1 energi',
         false,
       ),
       Rule(
@@ -52,7 +52,11 @@ class RuleBox extends StatelessWidget {
         false,
       ),
       Rule(
-        'Jika kamu kehabisan energi, kamu harus menjalankan hukuman dan akan memulai hitungan hari dari 0',
+        'Jika kamu kehabisan energi, perhitungan hari mu tidak akan bertambah',
+        false,
+      ),
+      Rule(
+        'Jika kamu kehabisan energi, kamu harus menjalankan hukuman terlebih dahulu untuk memulai kembali dari 0',
         false,
       ),
     ];

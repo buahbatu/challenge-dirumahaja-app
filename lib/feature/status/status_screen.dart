@@ -160,7 +160,7 @@ class _StatusScreenState extends State<StatusScreen> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.all(58),
-      elevation: 8,
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
