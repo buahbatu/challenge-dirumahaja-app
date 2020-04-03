@@ -6,7 +6,6 @@ import 'package:dirumahaja/feature/register/challenger_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {

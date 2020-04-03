@@ -1,7 +1,7 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_punishment.dart';
-import 'package:dirumahaja/core/result/entity/entity_rule.dart';
+import 'package:dirumahaja/core/entity/entity_punishment.dart';
+import 'package:dirumahaja/core/entity/entity_rule.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:flutter/material.dart';

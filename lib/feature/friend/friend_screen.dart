@@ -1,6 +1,6 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_friend.dart';
+import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';

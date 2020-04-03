@@ -1,9 +1,37 @@
+import 'package:dirumahaja/core/network/api.dart';
+import 'package:dirumahaja/core/network/base_result.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileExist extends Data {
+  final bool isExist;
+
+  ProfileExist(this.isExist);
+
+  static ProfileExist dataParser(Map<String, dynamic> json) {
+    return ProfileExist(json[KEY_IS_EXIST]);
+  }
+
+  ProfileExist copyWith({String isExist}) {
+    return ProfileExist(isExist != null ? isExist : this.isExist);
+  }
+
+  static const KEY_IS_EXIST = 'is_exist';
+
+  Map<String, dynamic> toMap() {
+    return {KEY_IS_EXIST: isExist};
+  }
+}
+
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -21,6 +49,22 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool isUsernameExist = false;
+
+  final _debouncer = Debouncer(milliseconds: 1000);
+
+  void onUsernameChange(String name) async {
+    final result = await Api().post<ProfileExist>(
+      path: '/auth/check',
+      body: {"username": name},
+      dataParser: ProfileExist.dataParser,
+    );
+
+    setState(() {
+      isUsernameExist = result?.data?.isExist ?? false;
+    });
   }
 
   Widget getTitle() {
@@ -70,9 +114,13 @@ class ProfileScreen extends StatelessWidget {
             Container(height: 8),
             TextField(
               style: GoogleFonts.muli(),
+              onChanged: (str) => _debouncer.run(() => onUsernameChange(str)),
               decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                errorText: isUsernameExist ? 'username telah digunakan' : null,
                 hintText: 'Isi username (IG / twitter) mu disini ...',
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),

@@ -7,14 +7,14 @@ typedef DataParser<T extends Data> = T Function(Map<String, dynamic> json);
 typedef OnResultListener = void Function(BaseResult message);
 
 class BaseResult<T extends Data> {
-  final Meta diagnostic;
+  final Meta meta;
   final T data;
   final Response<Map<String, dynamic>> httpResponse;
 
-  BaseResult(this.diagnostic, this.data, this.httpResponse);
+  BaseResult(this.meta, this.data, this.httpResponse);
 
   bool isSuccess() => httpResponse?.statusCode == 200;
-  bool isErrorConnection() => this.diagnostic == Meta.errorConnection;
+  bool isErrorConnection() => this.meta == Meta.errorConnection;
 
   static BaseResult errorServer<T extends Data>() {
     return BaseResult<T>(

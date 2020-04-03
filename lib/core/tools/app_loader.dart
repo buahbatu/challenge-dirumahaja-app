@@ -1,11 +1,15 @@
+import 'package:dirumahaja/core/network/api.dart';
+import 'package:dirumahaja/core/network/remote_env.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:dirumahaja/core/result/entity/entity_register.dart';
 
 class AppLoader {
   Future<void> onAppStart({bool isDebug = false}) async {
-    // register DI for json decoder
-    EntityRegister.get().register();
+    // setup remote enve
+    RemoteEnv.setInstance(RemoteEnv.PRODUCTION);
+
+    // set API
+    Api(secret: RemoteEnv.get().secret);
 
     // Set `enableInDevMode` to true to see reports while in debug mode
     // This is only to be used for confirming that reports are being

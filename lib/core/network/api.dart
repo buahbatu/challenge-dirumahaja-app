@@ -39,7 +39,7 @@ class Api {
     if (env.port.isNotEmpty) {
       domain = '${env.protocol}://${env.domain}:${env.port}';
     }
-    if (!isGetRoot) domain += '/api';
+    // if (!isGetRoot) domain += '/api';
     return domain;
   }
 
@@ -53,10 +53,9 @@ class Api {
           error.type == DioErrorType.RESPONSE &&
           error.response.data is Map) {
         final result = error.response.data as Map<String, dynamic>;
-        if (!result.containsKey('diagnostics'))
-          throw BaseResult.errorServer<T>();
+        if (!result.containsKey('meta')) throw BaseResult.errorServer<T>();
         throw BaseResult<T>(
-          Meta.fromJson(result['diagnostics'] ?? {}),
+          Meta.fromJson(result['meta'] ?? {}),
           null,
           null,
         );

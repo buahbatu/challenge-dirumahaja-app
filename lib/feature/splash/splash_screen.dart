@@ -1,12 +1,12 @@
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/tools/app_preference.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,10 +15,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  final AppPreferance pref;
+  SharedPreferences pref;
 
-  _SplashScreenState({AppPreferance pref})
-      : this.pref = pref ?? AppPreferance.get();
+  _SplashScreenState({this.pref});
 
   @override
   void initState() {
@@ -39,14 +38,27 @@ class _SplashScreenState extends State<SplashScreen>
   double _heightButton = 0;
   double _widthButton = 0;
 
+  void goToDashboard() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+      (r) => false,
+    );
+  }
+
+  void goToRegister() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (ctx) => RegisterScreen()),
+    );
+  }
+
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
-    final isLogin = await pref.loadData('isLogin', defaultValue: false);
+    if (pref == null) pref = await SharedPreferences.getInstance();
+    final isLogin =
+        pref.containsKey('isLogin') ? pref.getBool('isLogin') : false;
+
     if (isLogin) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-        (r) => false,
-      );
+      goToDashboard();
     }
   }
 
@@ -181,11 +193,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             textColor: Colors.white,
             color: AppColor.buttonColor.toHexColor(),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => RegisterScreen()),
-              );
-            },
+            onPressed: () => goToRegister(),
           ),
         ),
         vsync: this,
