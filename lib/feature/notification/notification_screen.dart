@@ -114,14 +114,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   final resources = [
     Notif(
-      AppImages.tearSvg,
-      'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
-      '/punishment',
+      imagePath: AppImages.tearSvg,
+      description:
+          'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
+      action: '/punishment',
     ),
     Notif(
-      AppImages.happySvg,
-      'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
-      '',
+      imagePath: AppImages.happySvg,
+      description:
+          'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
+      action: '',
     ),
   ];
 }

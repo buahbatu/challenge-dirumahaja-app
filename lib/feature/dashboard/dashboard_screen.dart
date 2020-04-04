@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/entity/entity_notif.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
@@ -14,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -27,12 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Gradient shadeGradient = AppColor.shadeNoonGradient;
   Color userNameColor = Colors.black;
   Profile profile;
+  List<Notif> notifList;
 
   @override
   void initState() {
     super.initState();
     checkTimeBackground();
     loadProfile();
+    loadNotification();
   }
 
   void checkTimeBackground() {
@@ -48,6 +52,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         shadeGradient = AppColor.shadeNightGradient;
         userNameColor = Colors.white;
       }
+    });
+  }
+
+  void loadNotification() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/profile/notification?cache=false',
+          options: Options(headers: {'uid': user.uid}),
+        );
+
+    final notifs = Notif.fromMapList(request.data['data']);
+    setState(() {
+      notifList = notifs;
     });
   }
 
@@ -246,7 +264,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AppImages.pinSvg.toSvgPicture(width: 52),
             Column(
               children: <Widget>[
-                AppImages.heroPng.toPngImage(width: 42),
+                Container(
+                  height: 44,
+                  width: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(21),
+                  ),
+                ),
+                Container(height: 16),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                CachedNetworkImage(imageUrl: profile.emblemImgUrl, width: 42),
                 Container(height: 16),
               ],
             ),
@@ -505,15 +536,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           shape: CircleBorder(),
           child: AppImages.bellSvg.toSvgPicture(),
         ),
-        Container(
-          height: 12,
-          width: 12,
-          margin: const EdgeInsets.only(left: 26, bottom: 26),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: HexColor('FF5555'),
+        if (notifList.isNotEmpty)
+          Container(
+            height: 12,
+            width: 12,
+            margin: const EdgeInsets.only(left: 26, bottom: 26),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: HexColor('FF5555'),
+            ),
           ),
-        ),
       ],
     );
   }

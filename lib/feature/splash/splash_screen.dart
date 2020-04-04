@@ -3,11 +3,10 @@ import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_color/flutter_color.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -54,9 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     final isLogin = user != null;
 
-    if (isLogin) {
-      goToDashboard();
-    }
+    if (isLogin) goToDashboard();
   }
 
   @override
@@ -159,6 +156,34 @@ class _SplashScreenState extends State<SplashScreen>
               fontSize: 14,
               color: Colors.white,
             ),
+          ),
+          Container(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'by',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.muli(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+              Container(width: 4),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(21),
+                child: AppImages.milooLogoPng.toPngImage(height: 42),
+              ),
+              Container(width: 4),
+              Text(
+                'miloo.id',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.muli(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ],
       ),

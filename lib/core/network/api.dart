@@ -8,6 +8,8 @@ class Api {
   final Dio _dio;
   Api._internal({Dio dio}) : this._dio = dio ?? Dio(defaultOptions);
 
+  Dio getDio() => _dio;
+
   static final defaultOptions = BaseOptions(
     baseUrl: parseDomain(),
     connectTimeout: 180000,
