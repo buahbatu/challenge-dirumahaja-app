@@ -7,7 +7,7 @@ import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Function({String username, int age, bool isMale}) onSubmit;
+  final Function({String username, int age, String gender}) onSubmit;
 
   const ProfileScreen({Key key, this.onSubmit}) : super(key: key);
 
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   final _debouncerAge = Debouncer(milliseconds: 200);
 
   void toggleGender(bool isMale) async {
-    widget.onSubmit(isMale: isMale);
+    widget.onSubmit(gender: isMale ? "m" : "f");
     setState(() {
       this.isMale = isMale;
     });

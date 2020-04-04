@@ -2,6 +2,7 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -15,7 +16,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -50,9 +50,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
-    final pref = await SharedPreferences.getInstance();
-    final isLogin =
-        pref.containsKey('isLogin') ? pref.getBool('isLogin') : false;
+    final user = FirebaseAuth.instance.currentUser();
+
+    final isLogin = user != null;
 
     if (isLogin) {
       goToDashboard();

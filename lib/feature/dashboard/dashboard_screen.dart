@@ -1,3 +1,5 @@
+import 'package:dirumahaja/core/entity/entity_profile.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
@@ -7,9 +9,12 @@ import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:dirumahaja/feature/status/status_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -18,15 +23,17 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  Gradient skyGradient = AppColor.skyGradient;
+  Gradient shadeGradient = AppColor.shadeNoonGradient;
+  Color userNameColor = Colors.black;
+  Profile profile;
+
   @override
   void initState() {
     super.initState();
     checkTimeBackground();
+    loadProfile();
   }
-
-  Gradient skyGradient = AppColor.skyGradient;
-  Gradient shadeGradient = AppColor.shadeNoonGradient;
-  Color userNameColor = Colors.black;
 
   void checkTimeBackground() {
     setState(() {
@@ -41,6 +48,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
         shadeGradient = AppColor.shadeNightGradient;
         userNameColor = Colors.white;
       }
+    });
+  }
+
+  void loadProfile() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final profileResult = await Api().get<Profile>(
+      path: '/profile?cache=false',
+      dataParser: Profile.fromJson,
+      headers: {
+        'uid': user.uid,
+      },
+    );
+
+    profile = profileResult.data;
+    String city = profile.locationName;
+
+    if (city == null || city.isEmpty) {
+      List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+        double.tryParse(profile.coordinate.split(',')[0]),
+        double.tryParse(profile.coordinate.split(',')[1]),
+      );
+      if (placemark.length > 0) {
+        city = placemark[0].subAdministrativeArea;
+      }
+    }
+
+    if (city == null || city.isEmpty) city = "Unknown";
+
+    setState(() {
+      this.profile = profile.copyWith(locationName: city);
     });
   }
 
@@ -175,7 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Container(height: 32),
         Text(
-          'RaviDewaBucin',
+          profile?.username ?? '...',
           style: GoogleFonts.muli(color: userNameColor),
         ),
         Container(height: 2),
@@ -192,7 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Container(width: 4),
             Text(
-              'Bandung',
+              profile?.locationName ?? 'Unknown',
               style: GoogleFonts.raleway(
                 color: userNameColor,
                 fontSize: 16,
@@ -368,7 +406,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               Container(height: 4),
               Text(
-                '14 Hari',
+                '${profile?.sessionDay ?? 0} Hari',
                 style: GoogleFonts.raleway(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -383,7 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: AppColor.buttonColor.toHexColor(),
                 ),
                 child: Text(
-                  'Corona Hero',
+                  profile?.emblemName ?? '',
                   style: GoogleFonts.raleway(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

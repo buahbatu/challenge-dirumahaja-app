@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddressScreen extends StatefulWidget {
-  final Function(String coordinate) onSubmit;
+  final Function(String coordinate, String locationName) onSubmit;
 
   const AddressScreen({Key key, this.onSubmit}) : super(key: key);
 
@@ -31,7 +31,22 @@ class _AddressScreenState extends State<AddressScreen>
     final readPosition = await Geolocator().getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    widget.onSubmit('${readPosition.latitude}, ${readPosition.longitude}');
+
+    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+      readPosition.latitude,
+      readPosition.longitude,
+    );
+    String city = '';
+
+    if (placemark.length > 0) {
+      city = placemark[0].subAdministrativeArea;
+    }
+
+    widget.onSubmit(
+      '${readPosition.latitude}, ${readPosition.longitude}',
+      city,
+    );
+
     setState(() {
       this.position = readPosition;
     });

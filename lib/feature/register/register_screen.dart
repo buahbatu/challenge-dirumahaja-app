@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
@@ -12,7 +10,6 @@ import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -22,7 +19,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  Profile profile = Profile(isMale: true);
+  Profile profile = Profile(gender: "m");
 
   void updateProfile(Profile profile) {
     this.profile = profile;
@@ -34,14 +31,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (pages == null)
       pages = [
         ProfileScreen(
-          onSubmit: ({username, age, isMale}) => updateProfile(profile.copyWith(
+          onSubmit: ({username, age, gender}) => updateProfile(profile.copyWith(
             username: username,
             age: age,
-            isMale: isMale,
+            gender: gender,
           )),
         ),
         AddressScreen(
-          onSubmit: (coordinate) =>
+          onSubmit: (coordinate, locationName) =>
               updateProfile(profile.copyWith(coordinate: coordinate)),
         ),
         ChallengerScreen(
@@ -108,12 +105,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  void saveToPref(Map<String, dynamic> map) async {
-    final pref = await SharedPreferences.getInstance();
-    pref.setBool('isLogin', true);
-    pref.setString('profile', jsonEncode(map));
-  }
-
   void doRegister(Profile profile, BuildContext context) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     // make sure to create new user
@@ -125,8 +116,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "uid": uid,
       "username": profile.username,
       "coordinate": profile.coordinate,
+      "location_name": profile.locationName,
       "challenger": profile.challenger,
-      "male": profile.isMale ? "m" : "f"
+      "age": profile.age,
+      "gender": profile.gender
     };
 
     final result = await Api().post(
@@ -136,7 +129,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     if (result.isSuccess()) {
-      saveToPref(profileData);
       onRegisterSuccess();
     } else if (result.meta.errorType == "USER_ALREADY_EXIST") {
       onRegisterError(
