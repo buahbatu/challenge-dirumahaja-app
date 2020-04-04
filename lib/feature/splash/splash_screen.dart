@@ -15,9 +15,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  SharedPreferences pref;
-
-  _SplashScreenState({this.pref});
 
   @override
   void initState() {
@@ -53,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
-    if (pref == null) pref = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
     final isLogin =
         pref.containsKey('isLogin') ? pref.getBool('isLogin') : false;
 

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dirumahaja/core/entity/entity_profile.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
@@ -6,8 +9,10 @@ import 'package:dirumahaja/feature/register/address_screen.dart';
 import 'package:dirumahaja/feature/register/challenger_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -103,9 +108,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  void doRegister(Profile profile, Function onSuccess) {}
+  void saveToPref(Map<String, dynamic> map) async {
+    final pref = await SharedPreferences.getInstance();
+    pref.setBool('isLogin', true);
+    pref.setString('profile', jsonEncode(map));
+  }
 
-  void onNextClick() {
+  void doRegister(Profile profile, BuildContext context) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    // make sure to create new user
+    if (await _auth.currentUser() != null) _auth.signOut();
+    final userRegisResult = await _auth.signInAnonymously();
+    final uid = userRegisResult.user.uid;
+
+    final profileData = {
+      "uid": uid,
+      "username": profile.username,
+      "coordinate": profile.coordinate,
+      "challenger": profile.challenger,
+      "male": profile.isMale ? "m" : "f"
+    };
+
+    final result = await Api().post(
+      path: '/auth/register',
+      body: profileData,
+      dataParser: null,
+    );
+
+    if (result.isSuccess()) {
+      saveToPref(profileData);
+      onRegisterSuccess();
+    } else if (result.meta.errorType == "USER_ALREADY_EXIST") {
+      onRegisterError(
+        "Username telah terdaftar, silahkan daftar menggunakan username baru",
+        context,
+      );
+    } else {
+      onRegisterError(result.meta.errorMessage, context);
+    }
+  }
+
+  void onRegisterSuccess() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+      (r) => false,
+    );
+  }
+
+  void onRegisterError(String msg, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
+  }
+
+  void onNextClick(BuildContext context) {
     if (currentPage + 1 < RegisterScreen.maxPage) {
       controller.animateToPage(
         currentPage + 1,
@@ -113,12 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      doRegister(profile, () {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-          (r) => false,
-        );
-      });
+      doRegister(profile, context);
     }
   }
 
@@ -154,31 +205,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget getNextButton() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 52,
-        width: double.infinity,
-        margin: EdgeInsets.all(16),
-        child: RaisedButton(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            currentPage < RegisterScreen.maxPage - 1
-                ? 'Lanjut'
-                : 'Oke, Aku Siap!',
-            style: GoogleFonts.muli(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
+    return Builder(builder: (context) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 52,
+          width: double.infinity,
+          margin: EdgeInsets.all(16),
+          child: RaisedButton(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: Text(
+              currentPage < RegisterScreen.maxPage - 1
+                  ? 'Lanjut'
+                  : 'Oke, Aku Siap!',
+              style: GoogleFonts.muli(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            color: AppColor.buttonColor.toHexColor(),
+            onPressed: () => onNextClick(context),
           ),
-          color: AppColor.buttonColor.toHexColor(),
-          onPressed: onNextClick,
         ),
-      ),
-    );
+      );
+    });
   }
 }

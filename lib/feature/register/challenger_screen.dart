@@ -28,9 +28,12 @@ class _ChallengerScreenState extends State<ChallengerScreen>
       body: {"username": userName},
       dataParser: ProfileExist.dataParser,
     );
-    widget.onSubmit(userName);
     setState(() {
       isUsernameExist = result?.data?.isExist ?? false;
+      if (isUsernameExist)
+        widget.onSubmit(userName);
+      else
+        widget.onSubmit("");
     });
   }
 

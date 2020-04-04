@@ -59,10 +59,9 @@ class Meta {
   factory Meta.fromJson(Map<String, dynamic> parsedJson) {
     return Meta(
       parsedJson['code'],
-      parsedJson['errorMessage'],
-      parsedJson['errorType'],
-      parsedJson['userMessage'],
-      isCanceled: parsedJson['isCanceled'],
+      parsedJson['error_message'],
+      parsedJson['error_type'],
+      parsedJson['user_message'],
     );
   }
 
