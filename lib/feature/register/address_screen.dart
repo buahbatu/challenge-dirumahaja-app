@@ -1,9 +1,44 @@
+import 'package:dirumahaja/core/location/location.dart';
+import 'package:dirumahaja/core/location/map_data.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/static_map.dart';
+import 'package:dirumahaja/feature/map/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddressScreen extends StatelessWidget {
+class AddressScreen extends StatefulWidget {
+  @override
+  _AddressScreenState createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends State<AddressScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    getCoordinates();
+  }
+
+  Position position;
+
+  void getCoordinates() async {
+    final readPosition = await Geolocator().getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      position = readPosition;
+    });
+  }
+
+  void goToMapScreen() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => MapScreen(),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -68,23 +103,29 @@ class AddressScreen extends StatelessWidget {
               ),
             ),
             Container(height: 8),
-            TextField(
-              style: GoogleFonts.muli(),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                hintText: '247.00032, 12.00023',
-                filled: true,
-                fillColor: AppColor.greyBgColor.toHexColor(),
-                border: new OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(8),
+            InkWell(
+              onTap: () => goToMapScreen(),
+              child: TextField(
+                style: GoogleFonts.muli(),
+                decoration: InputDecoration(
+                  enabled: false,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
                   ),
-                  borderSide: new BorderSide(
-                    color: Colors.black,
-                    width: 1.0,
+                  hintText: position == null
+                      ? '247.00032, 12.00023'
+                      : '${position.latitude}, ${position.longitude}',
+                  filled: true,
+                  fillColor: AppColor.greyBgColor.toHexColor(),
+                  border: new OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(8),
+                    ),
+                    borderSide: new BorderSide(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
                   ),
                 ),
               ),
@@ -108,19 +149,50 @@ class AddressScreen extends StatelessWidget {
         ),
       ),
       Container(height: 8),
-      Container(
-        height: 130,
-        color: AppColor.greyBgColor.toHexColor(),
-      ),
+      InkWell(child: getMapRect(), onTap: goToMapScreen),
       Container(height: 8),
-      Text(
-        'Lingkungan rumah 500m dari titik rumah',
-        style: GoogleFonts.muli(
-          fontSize: 12,
-          color: AppColor.bodyColor.toHexColor(),
-        ),
-      ),
+      // Text(
+      //   'Lingkungan rumah 500m dari titik rumah',
+      //   style: GoogleFonts.muli(
+      //     fontSize: 12,
+      //     color: AppColor.bodyColor.toHexColor(),
+      //   ),
+      // ),
     ];
+  }
+
+  Stack getMapRect() {
+    final width = MediaQuery.of(context).size.width;
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        if (position == null)
+          Center(
+            child: Container(
+              height: 200,
+              color: AppColor.greyBgColor.toHexColor(),
+            ),
+          ),
+        if (position != null)
+          StaticMap(MapData(
+            Coordinate(position.latitude, position.longitude),
+            width.toInt(),
+            200,
+          )),
+        Container(
+          height: 140,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle, color: Colors.blue.withOpacity(0.4)),
+        ),
+        Container(
+          height: 12,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColor.titleColor.toHexColor(),
+          ),
+        ),
+      ],
+    );
   }
 
   Container getGenderRow() {

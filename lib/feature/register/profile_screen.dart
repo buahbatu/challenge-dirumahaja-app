@@ -52,13 +52,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool isUsernameExist = false;
+  String userName = "";
+  int umur = 0;
+  bool isMale = true;
 
-  final _debouncer = Debouncer(milliseconds: 1000);
+  final _debouncerUsername = Debouncer(milliseconds: 1000);
+  final _debouncerAge = Debouncer(milliseconds: 200);
+
+  void toggleGender(bool isMale) async {
+    setState(() {
+      this.isMale = isMale;
+    });
+  }
+
+  void onAgeChange(String age) async {
+    final parsedAge = int.tryParse(age);
+    if (parsedAge != null && parsedAge > 0) {
+      umur = parsedAge;
+    }
+  }
 
   void onUsernameChange(String name) async {
+    userName = name;
     final result = await Api().post<ProfileExist>(
       path: '/auth/check',
-      body: {"username": name},
+      body: {"username": userName},
       dataParser: ProfileExist.dataParser,
     );
 
@@ -114,7 +132,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(height: 8),
             TextField(
               style: GoogleFonts.muli(),
-              onChanged: (str) => _debouncer.run(() => onUsernameChange(str)),
+              onChanged: (str) => _debouncerUsername.run(
+                () => onUsernameChange(str),
+              ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -161,6 +181,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             child: TextField(
               style: GoogleFonts.muli(),
+              keyboardType: TextInputType.number,
+              onChanged: (str) => _debouncerAge.run(() => onAgeChange(str)),
               decoration: InputDecoration(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -211,13 +233,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 'Pria',
                 style: GoogleFonts.muli(
-                  color: Colors.white,
+                  color:
+                      isMale ? Colors.white : AppColor.bodyColor.toHexColor(),
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              color: HexColor('0165C0'),
-              onPressed: () {},
+              color: isMale ? HexColor('0165C0') : null,
+              onPressed: () => toggleGender(true),
             ),
           ),
           Expanded(
@@ -230,14 +253,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 'Wanita',
                 style: GoogleFonts.muli(
-                  color: AppColor.bodyColor.toHexColor(),
-                  // color: Colors.white,
+                  color:
+                      isMale ? AppColor.bodyColor.toHexColor() : Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              // color: HexColor('0165C0'),
-              onPressed: () {},
+              color: isMale ? null : HexColor('0165C0'),
+              onPressed: () => toggleGender(false),
             ),
           ),
         ],
