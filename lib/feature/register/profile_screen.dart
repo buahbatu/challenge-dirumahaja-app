@@ -1,39 +1,29 @@
+import 'package:dirumahaja/core/entity/entity_usename_exist.dart';
 import 'package:dirumahaja/core/network/api.dart';
-import 'package:dirumahaja/core/network/base_result.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/tools/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileExist extends Data {
-  final bool isExist;
-
-  ProfileExist(this.isExist);
-
-  static ProfileExist dataParser(Map<String, dynamic> json) {
-    return ProfileExist(json[KEY_IS_EXIST]);
-  }
-
-  ProfileExist copyWith({String isExist}) {
-    return ProfileExist(isExist != null ? isExist : this.isExist);
-  }
-
-  static const KEY_IS_EXIST = 'is_exist';
-
-  Map<String, dynamic> toMap() {
-    return {KEY_IS_EXIST: isExist};
-  }
-}
-
 class ProfileScreen extends StatefulWidget {
+  final Function({String username, int age, bool isMale}) onSubmit;
+
+  const ProfileScreen({Key key, this.onSubmit}) : super(key: key);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
+  String userName = "";
+  int umur = 22;
+  bool isMale = true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -52,14 +42,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool isUsernameExist = false;
-  String userName = "";
-  int umur = 0;
-  bool isMale = true;
 
   final _debouncerUsername = Debouncer(milliseconds: 1000);
   final _debouncerAge = Debouncer(milliseconds: 200);
 
   void toggleGender(bool isMale) async {
+    widget.onSubmit(isMale: isMale);
     setState(() {
       this.isMale = isMale;
     });
@@ -69,6 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final parsedAge = int.tryParse(age);
     if (parsedAge != null && parsedAge > 0) {
       umur = parsedAge;
+      widget.onSubmit(age: umur);
     }
   }
 
@@ -79,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: {"username": userName},
       dataParser: ProfileExist.dataParser,
     );
-
+    widget.onSubmit(username: userName);
     setState(() {
       isUsernameExist = result?.data?.isExist ?? false;
     });
@@ -140,8 +129,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   horizontal: 12,
                   vertical: 6,
                 ),
-                errorText: isUsernameExist ? 'username telah digunakan' : null,
-                hintText: 'Isi username (IG / twitter) mu disini ...',
+                errorText: isUsernameExist ? 'username sudah digunakan' : null,
+                hintText: 'Isi username (IG / twitter) mu disini',
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -184,9 +173,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               keyboardType: TextInputType.number,
               onChanged: (str) => _debouncerAge.run(() => onAgeChange(str)),
               decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                hintText: '22',
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                hintText: umur.toString(),
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -267,4 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

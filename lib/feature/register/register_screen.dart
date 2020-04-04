@@ -1,3 +1,4 @@
+import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
@@ -13,16 +14,40 @@ class RegisterScreen extends StatefulWidget {
   _RegisterScreenState createState() => _RegisterScreenState();
 
   static const int maxPage = 4;
-
-  final pages = [
-    ProfileScreen(),
-    AddressScreen(),
-    ChallengerScreen(),
-    RuleBookScreen(),
-  ];
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  Profile profile = Profile(isMale: true);
+
+  void updateProfile(Profile profile) {
+    this.profile = profile;
+  }
+
+  List<Widget> pages;
+
+  List<Widget> getPages() {
+    if (pages == null)
+      pages = [
+        ProfileScreen(
+          onSubmit: ({username, age, isMale}) => updateProfile(profile.copyWith(
+            username: username,
+            age: age,
+            isMale: isMale,
+          )),
+        ),
+        AddressScreen(
+          onSubmit: (coordinate) =>
+              updateProfile(profile.copyWith(coordinate: coordinate)),
+        ),
+        ChallengerScreen(
+          onSubmit: (challenger) =>
+              updateProfile(profile.copyWith(challenger: challenger)),
+        ),
+        RuleBookScreen(),
+      ];
+    return pages;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final PageController controller = PageController(initialPage: 0);
 
   Widget createPages(BuildContext ctx, int order) {
-    return widget.pages[order];
+    return getPages()[order];
   }
 
   void onPageChanged(index) {
@@ -77,6 +102,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       currentPage = index;
     });
   }
+
+  void doRegister(Profile profile, Function onSuccess) {}
 
   void onNextClick() {
     if (currentPage + 1 < RegisterScreen.maxPage) {
@@ -86,10 +113,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-        (r) => false,
-      );
+      doRegister(profile, () {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+          (r) => false,
+        );
+      });
     }
   }
 

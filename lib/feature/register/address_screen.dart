@@ -9,11 +9,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddressScreen extends StatefulWidget {
+  final Function(String coordinate) onSubmit;
+
+  const AddressScreen({Key key, this.onSubmit}) : super(key: key);
+
   @override
   _AddressScreenState createState() => _AddressScreenState();
 }
 
-class _AddressScreenState extends State<AddressScreen> {
+class _AddressScreenState extends State<AddressScreen>
+    with AutomaticKeepAliveClientMixin {
+  Position position;
   @override
   void initState() {
     super.initState();
@@ -21,15 +27,13 @@ class _AddressScreenState extends State<AddressScreen> {
     getCoordinates();
   }
 
-  Position position;
-
   void getCoordinates() async {
     final readPosition = await Geolocator().getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-
+    widget.onSubmit('${readPosition.latitude}, ${readPosition.longitude}');
     setState(() {
-      position = readPosition;
+      this.position = readPosition;
     });
   }
 
@@ -41,6 +45,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -151,13 +156,13 @@ class _AddressScreenState extends State<AddressScreen> {
       Container(height: 8),
       InkWell(child: getMapRect(), onTap: goToMapScreen),
       Container(height: 8),
-      // Text(
-      //   'Lingkungan rumah 500m dari titik rumah',
-      //   style: GoogleFonts.muli(
-      //     fontSize: 12,
-      //     color: AppColor.bodyColor.toHexColor(),
-      //   ),
-      // ),
+      Text(
+        'Kamu tidak boleh keluar dari daerah lingakaran biru',
+        style: GoogleFonts.muli(
+          fontSize: 12,
+          color: AppColor.bodyColor.toHexColor(),
+        ),
+      ),
     ];
   }
 
@@ -246,4 +251,7 @@ class _AddressScreenState extends State<AddressScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
