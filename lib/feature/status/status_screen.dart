@@ -1,9 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/entity/entity_emblem.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StatusScreen extends StatefulWidget {
@@ -12,10 +18,82 @@ class StatusScreen extends StatefulWidget {
   const StatusScreen(this.profile, {Key key}) : super(key: key);
 
   @override
-  _StatusScreenState createState() => _StatusScreenState();
+  _StatusScreenState createState() => _StatusScreenState(profile);
 }
 
 class _StatusScreenState extends State<StatusScreen> {
+  Profile profile;
+
+  _StatusScreenState(this.profile);
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllAmblem();
+  }
+
+  List<Emblem> emblemList = [];
+
+  void loadAllAmblem() async {
+    final user = await FirebaseAuth.instance.currentUser();
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/emblem/all',
+          options: Options(headers: {'uid': user.uid}),
+        );
+    final emblems = Emblem.fromMapList(request.data['data']);
+
+    setState(() {
+      emblemList = emblems;
+    });
+  }
+
+  void loadProfile() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final profileResult = await Api().get<Profile>(
+      path: '/profile?cache=false',
+      dataParser: Profile.fromJson,
+      headers: {
+        'uid': user.uid,
+      },
+    );
+
+    profile = profileResult.data;
+    String city = profile.locationName;
+
+    if (city == null || city.isEmpty) {
+      List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+        double.tryParse(profile.coordinate.split(',')[0]),
+        double.tryParse(profile.coordinate.split(',')[1]),
+      );
+      if (placemark.length > 0) {
+        city = placemark[0].subAdministrativeArea;
+      }
+    }
+
+    if (city == null || city.isEmpty) city = "Unknown";
+
+    setState(() {
+      this.profile = profile.copyWith(locationName: city);
+    });
+  }
+
+  void selectEmblem(Emblem e) async {
+    try {
+      final user = await FirebaseAuth.instance.currentUser();
+
+      final request = await Api().getDio().put<Map<String, dynamic>>(
+            '/emblem/${e.code}',
+            options: Options(headers: {'uid': user.uid}),
+          );
+
+      print(request);
+      loadProfile();
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,19 +124,25 @@ class _StatusScreenState extends State<StatusScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Stack(
-          children: <Widget>[
-            getUserInfo(),
-            Align(
-              child: createImage(AppImages.heroPng, 128, 8, HexColor('8EC13F')),
-              alignment: Alignment.topCenter,
-            ),
-          ],
+          children: <Widget>[getUserInfo(), getUserPin()],
         ),
         getBannerCard(),
         Container(height: 16),
         getEmblemHint(),
         getOptions(),
       ],
+    );
+  }
+
+  Align getUserPin() {
+    return Align(
+      child: createImage(
+        profile?.emblemImgUrl ?? '',
+        128,
+        8,
+        HexColor('8EC13F'),
+      ),
+      alignment: Alignment.topCenter,
     );
   }
 
@@ -85,26 +169,22 @@ class _StatusScreenState extends State<StatusScreen> {
       childAspectRatio: 1.3,
       padding: const EdgeInsets.all(16),
       physics: NeverScrollableScrollPhysics(),
-      children: <Widget>[
-        getOptionCard(),
-        getOptionCard(),
-        getOptionCard(),
-      ],
+      children: emblemList.map((e) => getOptionCard(e)).toList(),
     );
   }
 
-  Widget getOptionCard() {
+  Widget getOptionCard(Emblem e) {
     return Material(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       elevation: 1,
       child: InkWell(
-        onTap: () {},
+        onTap: () => selectEmblem(e),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              createImage(AppImages.heroPng, 64, 2, Colors.blue),
-              Container(height: 8),
+              createImage(e.imgUrl ?? '', 64, 2, Colors.blue),
+              Container(height: 12),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 decoration: BoxDecoration(
@@ -112,10 +192,10 @@ class _StatusScreenState extends State<StatusScreen> {
                   color: AppColor.buttonColor.toHexColor(),
                 ),
                 child: Text(
-                  'Corona Hero',
+                  e.name,
                   style: GoogleFonts.raleway(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -179,7 +259,7 @@ class _StatusScreenState extends State<StatusScreen> {
             getStatusBar(),
             Container(height: 24),
             Text(
-              widget.profile?.username ?? '',
+              profile?.username ?? '',
               textAlign: TextAlign.center,
               style: GoogleFonts.muli(
                 fontSize: 22,
@@ -188,7 +268,7 @@ class _StatusScreenState extends State<StatusScreen> {
               ),
             ),
             Text(
-              widget.profile?.locationName ?? '',
+              profile?.locationName ?? '',
               style: GoogleFonts.muli(
                 fontSize: 18,
                 color: Colors.black.withOpacity(0.7),
@@ -201,7 +281,7 @@ class _StatusScreenState extends State<StatusScreen> {
                 AppImages.energySvg.toSvgPicture(width: 10),
                 Container(width: 6),
                 Text(
-                  widget.profile?.sessionHealth.toString() ?? '',
+                  profile?.sessionHealth.toString() ?? '',
                   style: GoogleFonts.muli(color: Colors.black87),
                 ),
               ],
@@ -230,7 +310,7 @@ class _StatusScreenState extends State<StatusScreen> {
             border: Border.all(color: borderColor, width: width),
           ),
         ),
-        path.toPngImage(width: size - 2 * width),
+        CachedNetworkImage(imageUrl: path, width: size - 2 * width),
       ],
     );
   }
@@ -243,7 +323,7 @@ class _StatusScreenState extends State<StatusScreen> {
         color: AppColor.buttonColor.toHexColor(),
       ),
       child: Text(
-        widget.profile?.emblemName ?? '',
+        profile?.emblemName ?? '',
         style: GoogleFonts.raleway(
           color: Colors.white,
           fontSize: 26,
