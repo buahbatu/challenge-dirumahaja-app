@@ -1,11 +1,51 @@
-import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:dirumahaja/core/entity/entity_punishment.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/feature/punishment/punishment_check_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PunishmentScreen extends StatelessWidget {
+class PunishmentScreen extends StatefulWidget {
+  @override
+  _PunishmentScreenState createState() => _PunishmentScreenState();
+}
+
+class _PunishmentScreenState extends State<PunishmentScreen> {
+  List<Punishment> punishmentList = [];
+  @override
+  void initState() {
+    super.initState();
+    loadPunishment();
+  }
+
+  void loadPunishment() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/session/punishments',
+          options: Options(headers: {'uid': user.uid}),
+        );
+
+    final punishments = Punishment.fromMapList(request.data['data']);
+    setState(() {
+      punishmentList = punishments;
+    });
+  }
+
+  void logSelectedPunishment(Punishment n) async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final punishment = await Api().post(
+      path: '/session/punishments',
+      dataParser: null,
+      headers: {'uid': user.uid},
+      body: {"punishment": n.text},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +80,9 @@ class PunishmentScreen extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               separatorBuilder: (ctx, i) => Container(height: 12),
-              itemCount: resources.length,
+              itemCount: punishmentList.length,
               padding: EdgeInsets.all(16),
-              itemBuilder: (ctx, i) => createItem(resources[i], context),
+              itemBuilder: (ctx, i) => createItem(punishmentList[i], context),
             ),
           ),
         ],
@@ -63,11 +103,15 @@ class PunishmentScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: <Widget>[
-                  n.imagePath.toSvgPicture(width: 52),
+                  CachedNetworkImage(
+                    imageUrl: n.imgUrl,
+                    width: 52,
+                    fit: BoxFit.fitWidth,
+                  ),
                   Container(width: 16),
                   Expanded(
                     child: Text(
-                      n.description,
+                      n.text,
                       style: GoogleFonts.muli(
                         fontSize: 14,
                         height: 1.5,
@@ -90,33 +134,4 @@ class PunishmentScreen extends StatelessWidget {
     );
     ;
   }
-
-  final resources = [
-    Punishment(AppImages.tearSvg, 'Jawab 1 pertanyaan truth dari penantang mu'),
-    Punishment(
-      AppImages.happySvg,
-      'Post foto selfie memalukan di IG kamu dan katakan kamu kalah tantangan',
-    ),
-    Punishment(
-      AppImages.happySvg,
-      'Post video pengakuan di IG kamu dan katakan kamu kalah tantangan',
-    ),
-    Punishment(AppImages.happySvg, 'Lakukan 1 aksi dare dari penantang mu'),
-    Punishment(
-      AppImages.happySvg,
-      'Kirim donasi mengenai covid19 dan post buktinya di socmed kamu',
-    ),
-    Punishment(
-      AppImages.happySvg,
-      'Kirim makanan untuk penantang mu',
-    ),
-    Punishment(
-      AppImages.happySvg,
-      'Kirim makanan untuk penantang mu',
-    ),
-    Punishment(
-      AppImages.happySvg,
-      'Kirim makanan untuk penantang mu',
-    ),
-  ];
 }

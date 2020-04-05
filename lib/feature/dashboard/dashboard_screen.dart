@@ -280,6 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 CachedNetworkImage(
                   imageUrl: profile?.emblemImgUrl ?? '',
                   width: 42,
+                  fit: BoxFit.fitWidth,
                 ),
                 Container(height: 16),
               ],
@@ -363,7 +364,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         RaisedButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => NotificationScreen(),
+              builder: (ctx) => NotificationScreen(notifList),
             ));
           },
           color: Colors.white,

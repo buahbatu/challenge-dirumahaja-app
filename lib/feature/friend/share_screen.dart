@@ -153,7 +153,11 @@ class _ShareScreenState extends State<ShareScreen> {
                 border: Border.all(color: HexColor('8EC13F'), width: 8),
               ),
             ),
-            CachedNetworkImage(imageUrl: widget.imagePath, width: 112),
+            CachedNetworkImage(
+              imageUrl: widget.imagePath,
+              width: 112,
+              fit: BoxFit.fitWidth,
+            ),
           ],
         ),
         Container(height: 12),

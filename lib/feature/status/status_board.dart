@@ -252,7 +252,11 @@ class _StatusBoardState extends State<StatusBoard> {
             border: Border.all(color: HexColor('8EC13F'), width: 2),
           ),
         ),
-        CachedNetworkImage(imageUrl: path ?? '', width: 24)
+        CachedNetworkImage(
+          imageUrl: path ?? '',
+          width: 24,
+          fit: BoxFit.fitWidth,
+        )
       ],
     );
   }

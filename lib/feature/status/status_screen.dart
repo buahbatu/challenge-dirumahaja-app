@@ -28,7 +28,7 @@ class StatusScreen extends StatefulWidget {
 
 class _StatusScreenState extends State<StatusScreen> {
   Profile profile;
-  bool isHomeNeedReload;
+  bool isHomeNeedReload = false;
 
   _StatusScreenState(this.profile);
 
@@ -323,7 +323,11 @@ class _StatusScreenState extends State<StatusScreen> {
             border: Border.all(color: borderColor, width: width),
           ),
         ),
-        CachedNetworkImage(imageUrl: path, width: size - 2 * width),
+        CachedNetworkImage(
+          imageUrl: path,
+          width: size - 2 * width,
+          fit: BoxFit.fitWidth,
+        ),
       ],
     );
   }
