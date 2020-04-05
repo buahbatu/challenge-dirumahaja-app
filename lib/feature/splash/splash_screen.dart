@@ -1,11 +1,13 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/tools/app_preference.dart';
+import 'package:dirumahaja/core/tools/location_updater.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_color/flutter_color.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,17 +17,51 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  final AppPreferance pref;
-
-  _SplashScreenState({AppPreferance pref})
-      : this.pref = pref ?? AppPreferance.get();
-
   @override
   void initState() {
     super.initState();
 
+    initPlatformState();
     checkLoginState();
     showButton();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    // Configure BackgroundFetch.
+    BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          startOnBoot: true,
+          enableHeadless: true,
+          requiresBatteryNotLow: false,
+          requiresCharging: false,
+          requiresStorageNotLow: false,
+          requiresDeviceIdle: false,
+          requiredNetworkType: NetworkType.NONE,
+        ), (String taskId) {
+      LocationUpdater.doCheckIn(source: 'background');
+
+      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+      // for taking too long in the background.
+      BackgroundFetch.finish(taskId);
+    }).then((int status) {
+      print('[BackgroundFetch] configure success: $status');
+    }).catchError((e) {
+      print('[BackgroundFetch] configure ERROR: $e');
+    });
+
+    // Optionally query the current BackgroundFetch status.
+    int status = await BackgroundFetch.status;
+    print(status);
+
+    BackgroundFetch.start().then((int status) {
+      print('[BackgroundFetch] start success: $status');
+      print('[BackgroundFetch] start at: ${DateTime.now()}');
+    }).catchError((e) {
+      print('[BackgroundFetch] start FAILURE: $e');
+    });
   }
 
   void showButton() async {
@@ -39,15 +75,26 @@ class _SplashScreenState extends State<SplashScreen>
   double _heightButton = 0;
   double _widthButton = 0;
 
+  void goToDashboard() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+      (r) => false,
+    );
+  }
+
+  void goToRegister() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (ctx) => RegisterScreen()),
+    );
+  }
+
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
-    final isLogin = await pref.loadData('isLogin', defaultValue: false);
-    if (isLogin) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-        (r) => false,
-      );
-    }
+    final user = FirebaseAuth.instance.currentUser();
+
+    final isLogin = user != null;
+
+    if (isLogin) goToDashboard();
   }
 
   @override
@@ -151,6 +198,34 @@ class _SplashScreenState extends State<SplashScreen>
               color: Colors.white,
             ),
           ),
+          Container(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'by',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.muli(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+              Container(width: 4),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(21),
+                child: AppImages.milooLogoPng.toPngImage(height: 42),
+              ),
+              Container(width: 4),
+              Text(
+                'miloo.id',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.muli(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -181,11 +256,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             textColor: Colors.white,
             color: AppColor.buttonColor.toHexColor(),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => RegisterScreen()),
-              );
-            },
+            onPressed: () => goToRegister(),
           ),
         ),
         vsync: this,

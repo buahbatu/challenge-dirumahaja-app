@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_punishment.dart';
-import 'package:dirumahaja/core/result/entity/entity_rule.dart';
+import 'package:dirumahaja/core/entity/entity_punishment.dart';
+import 'package:dirumahaja/core/entity/entity_rule.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,12 +54,14 @@ class _PunishmentCheckScreenState extends State<PunishmentCheckScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  widget.punishment.imagePath.toSvgPicture(
+                  CachedNetworkImage(
+                    imageUrl: widget.punishment.imgUrl,
                     width: 150,
+                    fit: BoxFit.fitWidth,
                   ),
                   Container(height: 24),
                   Text(
-                    widget.punishment.description,
+                    widget.punishment.text,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.muli(
                       fontSize: 22,
@@ -126,14 +131,25 @@ class _PunishmentCheckScreenState extends State<PunishmentCheckScreen> {
             fontWeight: FontWeight.w800,
           ),
         ),
-        // color: HexColor('9CD147'),
         color: AppColor.buttonColor.toHexColor(),
-        onPressed: resetStatus,
+        onPressed: () => resetStatus(),
       ),
     );
   }
 
+  Future logRestartEvent() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    await Api().post(
+      path: '/session/restart',
+      dataParser: null,
+      headers: {'uid': user.uid},
+      body: {"punishment": widget.punishment.text},
+    );
+  }
+
   void resetStatus() async {
+    await logRestartEvent();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (ctx) => DashboardScreen()),
       (r) => false,

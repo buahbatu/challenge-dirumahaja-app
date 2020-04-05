@@ -1,14 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/entity/entity_notif.dart';
+import 'package:dirumahaja/core/entity/entity_profile.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
-import 'package:dirumahaja/feature/friend/friend_screen.dart';
-import 'package:dirumahaja/feature/friend/share_screen.dart';
+import 'package:dirumahaja/feature/status/status_board.dart';
 import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
-import 'package:dirumahaja/feature/status/status_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,15 +23,23 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  @override
-  void initState() {
-    super.initState();
-    checkTimeBackground();
-  }
-
   Gradient skyGradient = AppColor.skyGradient;
   Gradient shadeGradient = AppColor.shadeNoonGradient;
   Color userNameColor = Colors.black;
+  Profile profile;
+  List<Notif> notifList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    reload();
+  }
+
+  void reload() {
+    checkTimeBackground();
+    loadProfile();
+    loadNotification();
+  }
 
   void checkTimeBackground() {
     setState(() {
@@ -41,6 +54,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
         shadeGradient = AppColor.shadeNightGradient;
         userNameColor = Colors.white;
       }
+    });
+  }
+
+  void loadNotification() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/profile/notification?cache=false',
+          options: Options(headers: {'uid': user.uid}),
+        );
+
+    final notifs = Notif.fromMapList(request.data['data']);
+    setState(() {
+      notifList = notifs;
+    });
+  }
+
+  void loadProfile() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final profileResult = await Api().get<Profile>(
+      path: '/profile?cache=false',
+      dataParser: Profile.fromJson,
+      headers: {'uid': user.uid},
+    );
+
+    profile = profileResult.data;
+    String city = profile.locationName;
+
+    if (city == null || city.isEmpty) {
+      List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+        double.tryParse(profile.coordinate.split(',')[0]),
+        double.tryParse(profile.coordinate.split(',')[1]),
+      );
+      if (placemark.length > 0) {
+        city = placemark[0].subAdministrativeArea;
+      }
+    }
+
+    if (city == null || city.isEmpty) city = "Unknown";
+
+    setState(() {
+      this.profile = profile.copyWith(locationName: city);
     });
   }
 
@@ -65,7 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Container(height: 32),
         getTopbar(),
-        getStatusBoard(),
+        StatusBoard(profile, () => reload()),
         getUserPin(),
         Expanded(child: Container()),
         getMainMenu(),
@@ -175,7 +231,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Container(height: 32),
         Text(
-          'RaviDewaBucin',
+          profile?.username ?? '...',
           style: GoogleFonts.muli(color: userNameColor),
         ),
         Container(height: 2),
@@ -192,7 +248,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Container(width: 4),
             Text(
-              'Bandung',
+              profile?.locationName ?? 'Unknown',
               style: GoogleFonts.raleway(
                 color: userNameColor,
                 fontSize: 16,
@@ -208,7 +264,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AppImages.pinSvg.toSvgPicture(width: 52),
             Column(
               children: <Widget>[
-                AppImages.heroPng.toPngImage(width: 42),
+                Container(
+                  height: 44,
+                  width: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(21),
+                  ),
+                ),
+                Container(height: 16),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                CachedNetworkImage(
+                  imageUrl: profile?.emblemImgUrl ?? '',
+                  width: 42,
+                  fit: BoxFit.fitWidth,
+                ),
                 Container(height: 16),
               ],
             ),
@@ -226,175 +299,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         getPageTitle(),
         getNotifButton(),
       ],
-    );
-  }
-
-  Widget getStatusBoard() {
-    return Card(
-      elevation: 2,
-      color: HexColor('F0F6FB'),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: const EdgeInsets.all(23.0),
-      child: Row(
-        children: <Widget>[
-          Flexible(
-            flex: 9,
-            child: getDayCount(),
-          ),
-          Flexible(
-            flex: 7,
-            child: getFriendCount(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container getFriendCount() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      alignment: Alignment.topLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Teman Challenge',
-            style: GoogleFonts.muli(
-              fontSize: 12,
-              color: AppColor.bodyColor.toHexColor(),
-            ),
-          ),
-          Container(height: 4),
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => FriendScreen()),
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                createImage(AppImages.heroPng),
-                createImage(AppImages.heroPng),
-                createImage(AppImages.heroPng),
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: HexColor('FFC010'),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '+3',
-                    style: GoogleFonts.muli(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(height: 16),
-          InkWell(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '+ Ajak Teman',
-                style: GoogleFonts.raleway(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.titleColor.toHexColor(),
-                ),
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => ShareScreen(
-                  'RaviDewaBucin',
-                  AppImages.heroPng,
-                ),
-              ));
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget createImage(String path) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Container(
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            border: Border.all(color: HexColor('8EC13F'), width: 2),
-          ),
-        ),
-        path.toPngImage(width: 24),
-      ],
-    );
-  }
-
-  Widget getDayCount() {
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      color: Colors.white,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => StatusScreen(),
-          ));
-        },
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Lama kamu di rumah',
-                style: GoogleFonts.muli(
-                  fontSize: 12,
-                  color: AppColor.bodyColor.toHexColor(),
-                ),
-              ),
-              Container(height: 4),
-              Text(
-                '14 Hari',
-                style: GoogleFonts.raleway(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.titleColor.toHexColor(),
-                ),
-              ),
-              Container(height: 16),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: AppColor.buttonColor.toHexColor(),
-                ),
-                child: Text(
-                  'Corona Hero',
-                  style: GoogleFonts.raleway(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -460,22 +364,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         RaisedButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => NotificationScreen(),
+              builder: (ctx) => NotificationScreen(notifList),
             ));
           },
           color: Colors.white,
           shape: CircleBorder(),
           child: AppImages.bellSvg.toSvgPicture(),
         ),
-        Container(
-          height: 12,
-          width: 12,
-          margin: const EdgeInsets.only(left: 26, bottom: 26),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: HexColor('FF5555'),
+        if (notifList.isNotEmpty)
+          Container(
+            height: 12,
+            width: 12,
+            margin: const EdgeInsets.only(left: 26, bottom: 26),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: HexColor('FF5555'),
+            ),
           ),
-        ),
       ],
     );
   }

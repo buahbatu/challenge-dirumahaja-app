@@ -1,5 +1,5 @@
 import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_activity.dart';
+import 'package:dirumahaja/core/entity/entity_activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';

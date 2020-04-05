@@ -1,11 +1,29 @@
+import 'package:dirumahaja/core/entity/entity_usename_exist.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  final Function({String username, int age, String gender}) onSubmit;
+
+  const ProfileScreen({Key key, this.onSubmit}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
+  String userName = "";
+  int umur = 22;
+  bool isMale = true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -21,6 +39,39 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool isUsernameExist = false;
+
+  final _debouncerUsername = Debouncer(milliseconds: 1000);
+  final _debouncerAge = Debouncer(milliseconds: 200);
+
+  void toggleGender(bool isMale) async {
+    widget.onSubmit(gender: isMale ? "m" : "f");
+    setState(() {
+      this.isMale = isMale;
+    });
+  }
+
+  void onAgeChange(String age) async {
+    final parsedAge = int.tryParse(age);
+    if (parsedAge != null && parsedAge > 0) {
+      umur = parsedAge;
+      widget.onSubmit(age: umur);
+    }
+  }
+
+  void onUsernameChange(String name) async {
+    userName = name;
+    final result = await Api().post<ProfileExist>(
+      path: '/auth/check',
+      body: {"username": userName},
+      dataParser: ProfileExist.dataParser,
+    );
+    widget.onSubmit(username: userName);
+    setState(() {
+      isUsernameExist = result?.data?.isExist ?? false;
+    });
   }
 
   Widget getTitle() {
@@ -70,10 +121,16 @@ class ProfileScreen extends StatelessWidget {
             Container(height: 8),
             TextField(
               style: GoogleFonts.muli(),
+              onChanged: (str) => _debouncerUsername.run(
+                () => onUsernameChange(str),
+              ),
               decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                hintText: 'Isi username (IG / twitter) mu disini ...',
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                errorText: isUsernameExist ? 'username sudah digunakan' : null,
+                hintText: 'Isi username (IG / twitter) mu disini',
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -113,10 +170,14 @@ class ProfileScreen extends StatelessWidget {
           Container(
             child: TextField(
               style: GoogleFonts.muli(),
+              keyboardType: TextInputType.number,
+              onChanged: (str) => _debouncerAge.run(() => onAgeChange(str)),
               decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                hintText: '22',
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                hintText: umur.toString(),
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -163,13 +224,14 @@ class ProfileScreen extends StatelessWidget {
               child: Text(
                 'Pria',
                 style: GoogleFonts.muli(
-                  color: Colors.white,
+                  color:
+                      isMale ? Colors.white : AppColor.bodyColor.toHexColor(),
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              color: HexColor('0165C0'),
-              onPressed: () {},
+              color: isMale ? HexColor('0165C0') : null,
+              onPressed: () => toggleGender(true),
             ),
           ),
           Expanded(
@@ -182,18 +244,21 @@ class ProfileScreen extends StatelessWidget {
               child: Text(
                 'Wanita',
                 style: GoogleFonts.muli(
-                  color: AppColor.bodyColor.toHexColor(),
-                  // color: Colors.white,
+                  color:
+                      isMale ? AppColor.bodyColor.toHexColor() : Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              // color: HexColor('0165C0'),
-              onPressed: () {},
+              color: isMale ? null : HexColor('0165C0'),
+              onPressed: () => toggleGender(false),
             ),
           ),
         ],
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

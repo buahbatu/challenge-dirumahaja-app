@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
-import 'package:dirumahaja/core/res/app_images.dart';
-import 'package:dirumahaja/core/result/entity/entity_notif.dart';
+import 'package:dirumahaja/core/entity/entity_notif.dart';
 import 'package:dirumahaja/feature/punishment/punishment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -8,6 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NotificationScreen extends StatefulWidget {
+  final List<Notif> notifs;
+
+  const NotificationScreen(this.notifs, {Key key}) : super(key: key);
+
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
 }
@@ -30,9 +34,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
         centerTitle: true,
       ),
       body: ListView.builder(
-        itemCount: resources.length,
+        itemCount: widget.notifs.length,
         padding: EdgeInsets.all(16),
-        itemBuilder: (ctx, i) => createItem(resources[i]),
+        itemBuilder: (ctx, i) => createItem(widget.notifs[i]),
       ),
     );
   }
@@ -46,11 +50,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: <Widget>[
-                n.imagePath.toSvgPicture(width: 52),
+                CachedNetworkImage(
+                  imageUrl: n.icon,
+                  width: 52,
+                  fit: BoxFit.fitWidth,
+                ),
                 Container(width: 16),
                 Expanded(
                   child: Text(
-                    n.description,
+                    n.text,
                     style: GoogleFonts.muli(
                       fontSize: 14,
                       height: 1.5,
@@ -112,16 +120,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
     }
   }
 
-  final resources = [
-    Notif(
-      AppImages.tearSvg,
-      'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
-      '/punishment',
-    ),
-    Notif(
-      AppImages.happySvg,
-      'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
-      '',
-    ),
-  ];
+  // final resources = [
+  //   Notif(
+  //     icon: AppImages.tearSvg,
+  //     text: 'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
+  //     action: '/punishment',
+  //   ),
+  //   Notif(
+  //     icon: AppImages.happySvg,
+  //     text:
+  //         'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
+  //     action: '',
+  //   ),
+  // ];
 }

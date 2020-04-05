@@ -115,4 +115,5 @@ extension AppImages on String {
   static final productivePng = 'assets/png/productive.png';
   static final playstorePng = 'assets/png/playstore.png';
   static final appstorePng = 'assets/png/appstore.png';
+  static final milooLogoPng = 'assets/png/miloo-logo.png';
 }

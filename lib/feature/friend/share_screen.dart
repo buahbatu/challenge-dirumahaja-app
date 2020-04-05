@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:flutter/material.dart';
@@ -144,15 +145,19 @@ class _ShareScreenState extends State<ShareScreen> {
           alignment: Alignment.center,
           children: <Widget>[
             Container(
-              width: 128,
-              height: 128,
+              width: 112,
+              height: 112,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
                 border: Border.all(color: HexColor('8EC13F'), width: 8),
               ),
             ),
-            widget.imagePath.toPngImage(width: 112),
+            CachedNetworkImage(
+              imageUrl: widget.imagePath,
+              width: 112,
+              fit: BoxFit.fitWidth,
+            ),
           ],
         ),
         Container(height: 12),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:dirumahaja/core/result/entity/entity_rule.dart';
+import 'package:dirumahaja/core/entity/entity_rule.dart';
 
 class RuleBox extends StatelessWidget {
   final double height;

@@ -1,11 +1,66 @@
+import 'package:dirumahaja/core/location/location.dart';
+import 'package:dirumahaja/core/location/map_data.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/static_map.dart';
+import 'package:dirumahaja/feature/map/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddressScreen extends StatelessWidget {
+class AddressScreen extends StatefulWidget {
+  final Function(String coordinate, String locationName) onSubmit;
+
+  const AddressScreen({Key key, this.onSubmit}) : super(key: key);
+
+  @override
+  _AddressScreenState createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends State<AddressScreen>
+    with AutomaticKeepAliveClientMixin {
+  Position position;
+  @override
+  void initState() {
+    super.initState();
+
+    getCoordinates();
+  }
+
+  void getCoordinates() async {
+    final readPosition = await Geolocator().getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+      readPosition.latitude,
+      readPosition.longitude,
+    );
+    String city = '';
+
+    if (placemark.length > 0) {
+      city = placemark[0].subAdministrativeArea;
+    }
+
+    widget.onSubmit(
+      '${readPosition.latitude}, ${readPosition.longitude}',
+      city,
+    );
+
+    setState(() {
+      this.position = readPosition;
+    });
+  }
+
+  void goToMapScreen() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => MapScreen(),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -68,23 +123,29 @@ class AddressScreen extends StatelessWidget {
               ),
             ),
             Container(height: 8),
-            TextField(
-              style: GoogleFonts.muli(),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                hintText: '247.00032, 12.00023',
-                filled: true,
-                fillColor: AppColor.greyBgColor.toHexColor(),
-                border: new OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(8),
+            InkWell(
+              onTap: () => goToMapScreen(),
+              child: TextField(
+                style: GoogleFonts.muli(),
+                decoration: InputDecoration(
+                  enabled: false,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
                   ),
-                  borderSide: new BorderSide(
-                    color: Colors.black,
-                    width: 1.0,
+                  hintText: position == null
+                      ? '247.00032, 12.00023'
+                      : '${position.latitude}, ${position.longitude}',
+                  filled: true,
+                  fillColor: AppColor.greyBgColor.toHexColor(),
+                  border: new OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(8),
+                    ),
+                    borderSide: new BorderSide(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
                   ),
                 ),
               ),
@@ -108,19 +169,50 @@ class AddressScreen extends StatelessWidget {
         ),
       ),
       Container(height: 8),
-      Container(
-        height: 130,
-        color: AppColor.greyBgColor.toHexColor(),
-      ),
+      InkWell(child: getMapRect(), onTap: goToMapScreen),
       Container(height: 8),
       Text(
-        'Lingkungan rumah 500m dari titik rumah',
+        'Kamu tidak boleh keluar dari daerah lingakaran biru',
         style: GoogleFonts.muli(
           fontSize: 12,
           color: AppColor.bodyColor.toHexColor(),
         ),
       ),
     ];
+  }
+
+  Stack getMapRect() {
+    final width = MediaQuery.of(context).size.width;
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        if (position == null)
+          Center(
+            child: Container(
+              height: 200,
+              color: AppColor.greyBgColor.toHexColor(),
+            ),
+          ),
+        if (position != null)
+          StaticMap(MapData(
+            Coordinate(position.latitude, position.longitude),
+            width.toInt(),
+            200,
+          )),
+        Container(
+          height: 140,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle, color: Colors.blue.withOpacity(0.4)),
+        ),
+        Container(
+          height: 12,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColor.titleColor.toHexColor(),
+          ),
+        ),
+      ],
+    );
   }
 
   Container getGenderRow() {
@@ -174,4 +266,7 @@ class AddressScreen extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

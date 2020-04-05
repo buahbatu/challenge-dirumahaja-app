@@ -1,3 +1,5 @@
+import 'package:dirumahaja/core/entity/entity_profile.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
@@ -5,8 +7,8 @@ import 'package:dirumahaja/feature/register/address_screen.dart';
 import 'package:dirumahaja/feature/register/challenger_screen.dart';
 import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,16 +16,40 @@ class RegisterScreen extends StatefulWidget {
   _RegisterScreenState createState() => _RegisterScreenState();
 
   static const int maxPage = 4;
-
-  final pages = [
-    ProfileScreen(),
-    AddressScreen(),
-    ChallengerScreen(),
-    RuleBookScreen(),
-  ];
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  Profile profile = Profile(gender: "m");
+
+  void updateProfile(Profile profile) {
+    this.profile = profile;
+  }
+
+  List<Widget> pages;
+
+  List<Widget> getPages() {
+    if (pages == null)
+      pages = [
+        ProfileScreen(
+          onSubmit: ({username, age, gender}) => updateProfile(profile.copyWith(
+            username: username,
+            age: age,
+            gender: gender,
+          )),
+        ),
+        AddressScreen(
+          onSubmit: (coordinate, locationName) =>
+              updateProfile(profile.copyWith(coordinate: coordinate)),
+        ),
+        ChallengerScreen(
+          onSubmit: (challenger) =>
+              updateProfile(profile.copyWith(challenger: challenger)),
+        ),
+        RuleBookScreen(),
+      ];
+    return pages;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final PageController controller = PageController(initialPage: 0);
 
   Widget createPages(BuildContext ctx, int order) {
-    return widget.pages[order];
+    return getPages()[order];
   }
 
   void onPageChanged(index) {
@@ -79,7 +105,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  void onNextClick() {
+  void doRegister(Profile profile, BuildContext context) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    // make sure to create new user
+    if (await _auth.currentUser() != null) _auth.signOut();
+    final userRegisResult = await _auth.signInAnonymously();
+    final uid = userRegisResult.user.uid;
+
+    final profileData = {
+      "uid": uid,
+      "username": profile.username,
+      "coordinate": profile.coordinate,
+      "location_name": profile.locationName,
+      "challenger": profile.challenger,
+      "age": profile.age,
+      "gender": profile.gender
+    };
+
+    final result = await Api().post(
+      path: '/auth/register',
+      body: profileData,
+      dataParser: null,
+    );
+
+    if (result.isSuccess()) {
+      onRegisterSuccess();
+    } else if (result.meta.errorType == "USER_ALREADY_EXIST") {
+      onRegisterError(
+        "Username telah terdaftar, silahkan daftar menggunakan username baru",
+        context,
+      );
+    } else {
+      onRegisterError(result.meta.errorMessage, context);
+    }
+  }
+
+  void onRegisterSuccess() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => DashboardScreen()),
+      (r) => false,
+    );
+  }
+
+  void onRegisterError(String msg, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
+  }
+
+  void onNextClick(BuildContext context) {
     if (currentPage + 1 < RegisterScreen.maxPage) {
       controller.animateToPage(
         currentPage + 1,
@@ -87,10 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => DashboardScreen()),
-        (r) => false,
-      );
+      doRegister(profile, context);
     }
   }
 
@@ -126,31 +197,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget getNextButton() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 52,
-        width: double.infinity,
-        margin: EdgeInsets.all(16),
-        child: RaisedButton(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            currentPage < RegisterScreen.maxPage - 1
-                ? 'Lanjut'
-                : 'Oke, Aku Siap!',
-            style: GoogleFonts.muli(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
+    return Builder(builder: (context) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 52,
+          width: double.infinity,
+          margin: EdgeInsets.all(16),
+          child: RaisedButton(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: Text(
+              currentPage < RegisterScreen.maxPage - 1
+                  ? 'Lanjut'
+                  : 'Oke, Aku Siap!',
+              style: GoogleFonts.muli(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            color: AppColor.buttonColor.toHexColor(),
+            onPressed: () => onNextClick(context),
           ),
-          color: AppColor.buttonColor.toHexColor(),
-          onPressed: onNextClick,
         ),
-      ),
-    );
+      );
+    });
   }
 }

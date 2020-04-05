@@ -1,11 +1,45 @@
+import 'package:dirumahaja/core/entity/entity_usename_exist.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ChallengerScreen extends StatelessWidget {
+class ChallengerScreen extends StatefulWidget {
+  final Function(String username) onSubmit;
+
+  const ChallengerScreen({Key key, this.onSubmit}) : super(key: key);
+
+  @override
+  _ChallengerScreenState createState() => _ChallengerScreenState();
+}
+
+class _ChallengerScreenState extends State<ChallengerScreen>
+    with AutomaticKeepAliveClientMixin {
+  bool isUsernameExist = false;
+  String userName = "";
+  final _debouncerUsername = Debouncer(milliseconds: 1000);
+
+  void onUsernameChange(String name) async {
+    userName = name;
+    final result = await Api().post<ProfileExist>(
+      path: '/auth/check',
+      body: {"username": userName},
+      dataParser: ProfileExist.dataParser,
+    );
+    setState(() {
+      isUsernameExist = result?.data?.isExist ?? false;
+      if (isUsernameExist)
+        widget.onSubmit(userName);
+      else
+        widget.onSubmit("");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -70,12 +104,18 @@ class ChallengerScreen extends StatelessWidget {
             Container(height: 8),
             TextField(
               style: GoogleFonts.muli(),
+              onChanged: (str) => _debouncerUsername.run(
+                () => onUsernameChange(str),
+              ),
               decoration: InputDecoration(
+                errorText: userName.isEmpty
+                    ? null
+                    : isUsernameExist ? null : 'username tidak ditemukan',
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 6,
                 ),
-                hintText: 'Isi username teman mu...',
+                hintText: 'Isi username teman mu',
                 filled: true,
                 fillColor: AppColor.greyBgColor.toHexColor(),
                 border: new OutlineInputBorder(
@@ -180,4 +220,7 @@ class ChallengerScreen extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
