@@ -119,18 +119,4 @@ class _NotificationScreenState extends State<NotificationScreen> {
       return 'Lihat Detail';
     }
   }
-
-  // final resources = [
-  //   Notif(
-  //     icon: AppImages.tearSvg,
-  //     text: 'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
-  //     action: '/punishment',
-  //   ),
-  //   Notif(
-  //     icon: AppImages.happySvg,
-  //     text:
-  //         'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
-  //     action: '',
-  //   ),
-  // ];
 }

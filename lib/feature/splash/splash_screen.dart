@@ -213,7 +213,7 @@ class _SplashScreenState extends State<SplashScreen>
               Container(width: 4),
               ClipRRect(
                 borderRadius: BorderRadius.circular(21),
-                child: AppImages.milooLogoPng.toPngImage(height: 42),
+                child: AppImages.milooLogoPng.toPngImage(height: 31),
               ),
               Container(width: 4),
               Text(

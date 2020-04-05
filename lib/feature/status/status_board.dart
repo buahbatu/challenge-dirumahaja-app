@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:dirumahaja/core/entity/entity_checkin.dart';
 import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
@@ -14,7 +11,6 @@ import 'package:dirumahaja/feature/status/status_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StatusBoard extends StatefulWidget {

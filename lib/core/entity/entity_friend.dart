@@ -20,12 +20,12 @@ class Friend {
   static Friend fromMap(Map<String, dynamic> map) {
     return Friend(
       username: map['username'],
-      locationName: map['locationName'],
-      emblemImgUrl: map['emblemImgUrl'],
-      emblemName: map['emblemName'],
-      sessionDay: map['sessionDay'],
-      sessionHealth: map['sessionHealth'],
-      sessionStatus: map['sessionStatus'],
+      locationName: map['location_name'],
+      emblemImgUrl: map['emblem_img_url'],
+      emblemName: map['emblem_name'],
+      sessionDay: map['session_day'],
+      sessionHealth: map['session_health'],
+      sessionStatus: map['session_status'],
     );
   }
 

@@ -132,6 +132,5 @@ class _PunishmentScreenState extends State<PunishmentScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (ctx) => PunishmentCheckScreen(n)),
     );
-    ;
   }
 }

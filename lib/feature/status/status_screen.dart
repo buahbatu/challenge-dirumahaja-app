@@ -43,7 +43,7 @@ class _StatusScreenState extends State<StatusScreen> {
   void loadAllAmblem() async {
     final user = await FirebaseAuth.instance.currentUser();
     final request = await Api().getDio().get<Map<String, dynamic>>(
-          '/emblem/all',
+          '/emblem',
           options: Options(headers: {'uid': user.uid}),
         );
     final emblems = Emblem.fromMapList(request.data['data']);
@@ -90,7 +90,7 @@ class _StatusScreenState extends State<StatusScreen> {
       final user = await FirebaseAuth.instance.currentUser();
 
       final request = await Api().getDio().put<Map<String, dynamic>>(
-            '/emblem/${e.code}',
+            '/emblem/${e.id}',
             options: Options(headers: {'uid': user.uid}),
           );
 
