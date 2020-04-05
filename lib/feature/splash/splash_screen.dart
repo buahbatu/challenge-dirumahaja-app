@@ -1,5 +1,7 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/core/tools/location_updater.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,8 +21,47 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
+    initPlatformState();
     checkLoginState();
     showButton();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    // Configure BackgroundFetch.
+    BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          startOnBoot: true,
+          enableHeadless: true,
+          requiresBatteryNotLow: false,
+          requiresCharging: false,
+          requiresStorageNotLow: false,
+          requiresDeviceIdle: false,
+          requiredNetworkType: NetworkType.NONE,
+        ), (String taskId) {
+      LocationUpdater.doCheckIn(source: 'background');
+
+      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+      // for taking too long in the background.
+      BackgroundFetch.finish(taskId);
+    }).then((int status) {
+      print('[BackgroundFetch] configure success: $status');
+    }).catchError((e) {
+      print('[BackgroundFetch] configure ERROR: $e');
+    });
+
+    // Optionally query the current BackgroundFetch status.
+    int status = await BackgroundFetch.status;
+    print(status);
+
+    BackgroundFetch.start().then((int status) {
+      print('[BackgroundFetch] start success: $status');
+      print('[BackgroundFetch] start at: ${DateTime.now()}');
+    }).catchError((e) {
+      print('[BackgroundFetch] start FAILURE: $e');
+    });
   }
 
   void showButton() async {

@@ -7,6 +7,7 @@ import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
+import 'package:dirumahaja/core/tools/location_updater.dart';
 import 'package:dirumahaja/feature/friend/friend_screen.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
 import 'package:dirumahaja/feature/status/status_screen.dart';
@@ -37,30 +38,15 @@ class _StatusBoardState extends State<StatusBoard> {
   void initState() {
     super.initState();
     loadFriends();
-    doCheckIn();
+    LocationUpdater.doCheckIn(onResult: onLocationUpdate);
   }
 
-  void doCheckIn() async {
-    final location = await Geolocator().getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    final randHour = Random().nextInt(23) + 1;
-    final user = await FirebaseAuth.instance.currentUser();
-    final nextCheckIn = DateTime.now().add(Duration(hours: randHour));
-
-    final checkInResult = await Api().post<CheckIn>(
-      path: '/session/checkin',
-      dataParser: CheckIn.fromMap,
-      headers: {'uid': user.uid},
-      body: {
-        "coordinate": "${location.latitude}, ${location.longitude}",
-        "next_checkin": nextCheckIn.toString(),
-      },
-    );
-
-    final errorMessage = checkInResult.meta.userMessage;
+  onLocationUpdate(result) {
+    final errorMessage = result.meta.userMessage;
     if (errorMessage != null && errorMessage.isNotEmpty)
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
   }
 
   void loadFriends() async {
