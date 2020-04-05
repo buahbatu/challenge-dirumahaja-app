@@ -1,3 +1,4 @@
+import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
@@ -6,19 +7,22 @@ import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StatusScreen extends StatefulWidget {
+  final Profile profile;
+
+  const StatusScreen(this.profile, {Key key}) : super(key: key);
+
   @override
   _StatusScreenState createState() => _StatusScreenState();
 }
 
 class _StatusScreenState extends State<StatusScreen> {
-  final bgColor = HexColor('F0F6FB');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: AppColor.bgColor.toHexColor(),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: bgColor,
+        backgroundColor: AppColor.bgColor.toHexColor(),
         title: Text(
           'Status Kamu',
           style: GoogleFonts.raleway(
@@ -136,7 +140,10 @@ class _StatusScreenState extends State<StatusScreen> {
             Container(
               height: 10,
               width: 10,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.bgColor.toHexColor(),
+              ),
             ),
             Text(
               'Koleksi Emblem kamu',
@@ -148,7 +155,10 @@ class _StatusScreenState extends State<StatusScreen> {
             Container(
               height: 10,
               width: 10,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.bgColor.toHexColor(),
+              ),
             ),
           ],
         ),
@@ -169,7 +179,7 @@ class _StatusScreenState extends State<StatusScreen> {
             getStatusBar(),
             Container(height: 24),
             Text(
-              'NisaBucinSelalu',
+              widget.profile?.username ?? '',
               textAlign: TextAlign.center,
               style: GoogleFonts.muli(
                 fontSize: 22,
@@ -178,7 +188,7 @@ class _StatusScreenState extends State<StatusScreen> {
               ),
             ),
             Text(
-              'Bandung',
+              widget.profile?.locationName ?? '',
               style: GoogleFonts.muli(
                 fontSize: 18,
                 color: Colors.black.withOpacity(0.7),
@@ -191,7 +201,7 @@ class _StatusScreenState extends State<StatusScreen> {
                 AppImages.energySvg.toSvgPicture(width: 10),
                 Container(width: 6),
                 Text(
-                  '3',
+                  widget.profile?.sessionHealth.toString() ?? '',
                   style: GoogleFonts.muli(color: Colors.black87),
                 ),
               ],
@@ -203,7 +213,11 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 
   Widget createImage(
-      String path, double size, double width, Color borderColor) {
+    String path,
+    double size,
+    double width,
+    Color borderColor,
+  ) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -229,10 +243,10 @@ class _StatusScreenState extends State<StatusScreen> {
         color: AppColor.buttonColor.toHexColor(),
       ),
       child: Text(
-        'Corona Hero',
+        widget.profile?.emblemName ?? '',
         style: GoogleFonts.raleway(
           color: Colors.white,
-          fontSize: 32,
+          fontSize: 26,
           fontWeight: FontWeight.w800,
         ),
       ),

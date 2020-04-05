@@ -321,7 +321,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget getStatusBoard() {
     return Card(
       elevation: 2,
-      color: HexColor('F0F6FB'),
+      color: AppColor.bgColor.toHexColor(),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.all(23.0),
       child: Row(
@@ -357,7 +357,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           InkWell(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => FriendScreen()),
+                MaterialPageRoute(
+                  builder: (ctx) => FriendScreen(
+                    profile?.username ?? '',
+                    profile?.emblemImgUrl ?? '',
+                  ),
+                ),
               );
             },
             child: Row(
@@ -367,7 +372,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     .map((f) => createImage(f?.emblemImgUrl ?? ''))
                     .toList(),
                 if (friendList.isEmpty) Text('Masih Kosong'),
-                if (friendList.isNotEmpty)
+                if (friendList.length > 3)
                   Container(
                     width: 28,
                     height: 28,
@@ -377,7 +382,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      '+3',
+                      '+${friendList.length - 3}',
                       style: GoogleFonts.muli(
                         fontWeight: FontWeight.bold,
                         color: Colors.black.withOpacity(0.6),
@@ -406,8 +411,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (ctx) => ShareScreen(
-                  'RaviDewaBucin',
-                  AppImages.heroPng,
+                  profile?.username ?? '',
+                  profile?.emblemImgUrl ?? '',
                 ),
               ));
             },
@@ -442,7 +447,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => StatusScreen(),
+            builder: (ctx) => StatusScreen(profile),
           ));
         },
         child: Container(

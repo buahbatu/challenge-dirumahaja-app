@@ -7,6 +7,11 @@ import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FriendScreen extends StatelessWidget {
+  final String username;
+  final String imagePath;
+
+  FriendScreen(this.username, this.imagePath);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +33,7 @@ class FriendScreen extends StatelessWidget {
             icon: Icon(Icons.share),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => ShareScreen(
-                  'RaviDewaBucin',
-                  AppImages.heroPng,
-                ),
+                builder: (ctx) => ShareScreen(username, imagePath),
               ));
             },
           )
