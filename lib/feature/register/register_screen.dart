@@ -19,7 +19,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  Profile profile = Profile(gender: "m");
+  Profile profile = Profile(gender: "m", age: 22);
 
   void updateProfile(Profile profile) {
     this.profile = profile;
