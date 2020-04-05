@@ -94,7 +94,6 @@ class _StatusScreenState extends State<StatusScreen> {
             options: Options(headers: {'uid': user.uid}),
           );
 
-      print(request);
       loadProfile();
     } catch (error) {
       print(error);
