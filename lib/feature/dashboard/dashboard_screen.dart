@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/core/entity/entity_notif.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
@@ -29,7 +30,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Gradient shadeGradient = AppColor.shadeNoonGradient;
   Color userNameColor = Colors.black;
   Profile profile;
-  List<Notif> notifList;
+  List<Notif> notifList = [];
+  List<Friend> friendList = [];
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkTimeBackground();
     loadProfile();
     loadNotification();
+    loadFriends();
   }
 
   void checkTimeBackground() {
@@ -52,6 +55,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         shadeGradient = AppColor.shadeNightGradient;
         userNameColor = Colors.white;
       }
+    });
+  }
+
+  void loadFriends() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/profile/relation?cache=false',
+          options: Options(headers: {'uid': user.uid}),
+        );
+
+    final friends = Friend.fromMapList(request.data['data']);
+    setState(() {
+      friendList = friends;
     });
   }
 
@@ -277,7 +294,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Column(
               children: <Widget>[
-                CachedNetworkImage(imageUrl: profile.emblemImgUrl, width: 42),
+                CachedNetworkImage(
+                  imageUrl: profile?.emblemImgUrl ?? '',
+                  width: 42,
+                ),
                 Container(height: 16),
               ],
             ),
@@ -343,25 +363,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                createImage(AppImages.heroPng),
-                createImage(AppImages.heroPng),
-                createImage(AppImages.heroPng),
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: HexColor('FFC010'),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '+3',
-                    style: GoogleFonts.muli(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black.withOpacity(0.6),
+                ...friendList
+                    .map((f) => createImage(f?.emblemImgUrl ?? ''))
+                    .toList(),
+                if (friendList.isEmpty) Text('Masih Kosong'),
+                if (friendList.isNotEmpty)
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: HexColor('FFC010'),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '+3',
+                      style: GoogleFonts.muli(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black.withOpacity(0.6),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -408,7 +430,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             border: Border.all(color: HexColor('8EC13F'), width: 2),
           ),
         ),
-        path.toPngImage(width: 24),
+        CachedNetworkImage(imageUrl: path ?? '', width: 24)
       ],
     );
   }

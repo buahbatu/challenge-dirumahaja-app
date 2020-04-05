@@ -1,19 +1,22 @@
 class Notif {
-  final String imagePath;
-  final String description;
+  final String text;
+  final String icon;
+  final String button;
   final String action;
 
   Notif({
-    this.imagePath,
-    this.description,
+    this.text,
+    this.icon,
+    this.button,
     this.action,
   });
 
   static Notif fromMap(Map<String, dynamic> map) {
     return Notif(
+      text: map['text'],
+      icon: map['icon'],
+      button: map['button'],
       action: map['action'],
-      description: map['text'],
-      imagePath: map['img_url'],
     );
   }
 

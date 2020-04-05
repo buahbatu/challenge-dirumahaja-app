@@ -74,7 +74,7 @@ class FriendScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            f.dayCount.toString(),
+            f.sessionDay.toString(),
             style: GoogleFonts.muli(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class FriendScreen extends StatelessWidget {
               AppImages.energySvg.toSvgPicture(width: 8),
               Container(width: 2),
               Text(
-                f.energyCount.toString(),
+                f.sessionHealth.toString(),
                 style: GoogleFonts.muli(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -111,7 +111,7 @@ class FriendScreen extends StatelessWidget {
   Padding getUserIcon(Friend f) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: f.imagePath.toPngImage(width: 68),
+      child: f.emblemImgUrl.toPngImage(width: 68),
     );
   }
 
@@ -128,7 +128,7 @@ class FriendScreen extends StatelessWidget {
           ),
         ),
         Text(
-          f.location,
+          f.locationName,
           style: GoogleFonts.muli(
             color: AppColor.bodyColor.toHexColor(),
           ),
@@ -144,7 +144,7 @@ class FriendScreen extends StatelessWidget {
             color: AppColor.buttonColor.toHexColor(),
           ),
           child: Text(
-            f.status,
+            f.emblemName,
             style: GoogleFonts.raleway(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -156,12 +156,12 @@ class FriendScreen extends StatelessWidget {
     );
   }
 
-  final resources = [
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+  final resources = <Friend>[
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
+    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
   ];
 }

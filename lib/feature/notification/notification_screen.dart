@@ -46,11 +46,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: <Widget>[
-                n.imagePath.toSvgPicture(width: 52),
+                n.icon.toSvgPicture(width: 52),
                 Container(width: 16),
                 Expanded(
                   child: Text(
-                    n.description,
+                    n.text,
                     style: GoogleFonts.muli(
                       fontSize: 14,
                       height: 1.5,
@@ -114,14 +114,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   final resources = [
     Notif(
-      imagePath: AppImages.tearSvg,
-      description:
-          'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
+      icon: AppImages.tearSvg,
+      text: 'Yah.. Nyawa Kamu Telah Habis, Ayo pilih hukuman dan coba lagi',
       action: '/punishment',
     ),
     Notif(
-      imagePath: AppImages.happySvg,
-      description:
+      icon: AppImages.happySvg,
+      text:
           'Yesss! Kamu menang Challenge melawan KaAlifYangSedih. Jangan lupa tagih hadiah mu',
       action: '',
     ),

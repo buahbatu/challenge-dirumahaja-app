@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     final isLogin = user != null;
 
-    if (isLogin) goToDashboard();
+    // if (isLogin) goToDashboard();
   }
 
   @override
