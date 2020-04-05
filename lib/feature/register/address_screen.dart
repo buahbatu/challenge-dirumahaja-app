@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddressScreen extends StatefulWidget {
   final Function(String coordinate, String locationName) onSubmit;
@@ -52,10 +53,19 @@ class _AddressScreenState extends State<AddressScreen>
     });
   }
 
-  void goToMapScreen() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (ctx) => MapScreen(),
+  void goToMapScreen() async {
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => MapScreen(position),
     ));
+
+    if (result != null && result is LatLng) {
+      setState(() {
+        this.position = Position(
+          latitude: result.latitude,
+          longitude: result.longitude,
+        );
+      });
+    }
   }
 
   @override
@@ -135,7 +145,7 @@ class _AddressScreenState extends State<AddressScreen>
                   ),
                   hintText: position == null
                       ? '247.00032, 12.00023'
-                      : '${position.latitude}, ${position.longitude}',
+                      : '${position.latitude.toStringAsFixed(7)}, ${position.longitude.toStringAsFixed(7)}',
                   filled: true,
                   fillColor: AppColor.greyBgColor.toHexColor(),
                   border: new OutlineInputBorder(

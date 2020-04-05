@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void checkLoginState() async {
     await Future.delayed(Duration(seconds: 2));
-    final user = FirebaseAuth.instance.currentUser();
+    final user = await FirebaseAuth.instance.currentUser();
 
     final isLogin = user != null;
 
