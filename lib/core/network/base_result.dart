@@ -45,6 +45,7 @@ class Meta {
   final int code;
   final String errorMessage;
   final String errorType;
+  final dynamic errorData;
   final String userMessage;
   final bool isCanceled;
 
@@ -52,6 +53,7 @@ class Meta {
     this.code,
     this.errorMessage,
     this.errorType,
+    this.errorData,
     this.userMessage, {
     this.isCanceled = false,
   });
@@ -61,6 +63,7 @@ class Meta {
       parsedJson['code'],
       parsedJson['error_message'],
       parsedJson['error_type'],
+      parsedJson['errorData'],
       parsedJson['user_message'],
     );
   }
@@ -69,6 +72,7 @@ class Meta {
     0,
     'Koneksi terputus',
     'CONNECTION_ERROR',
+    null,
     'hubungkan kembali ponsel ke internet',
   );
 
@@ -76,6 +80,7 @@ class Meta {
     1,
     'Koneksi kurang stabil',
     'ERROR_SERVER',
+    null,
     'Silahkan coba lagi!',
   );
 
@@ -83,6 +88,7 @@ class Meta {
     2,
     'Request di cancel',
     'CANCELED_REQUEST',
+    null,
     'Silahkan coba lagi!',
     isCanceled: true,
   );

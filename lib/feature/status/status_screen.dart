@@ -14,8 +14,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class StatusScreen extends StatefulWidget {
   final Profile profile;
+  final VoidCallback onHomeNeedReload;
 
-  const StatusScreen(this.profile, {Key key}) : super(key: key);
+  const StatusScreen(
+    this.profile,
+    this.onHomeNeedReload, {
+    Key key,
+  }) : super(key: key);
 
   @override
   _StatusScreenState createState() => _StatusScreenState(profile);
@@ -23,6 +28,7 @@ class StatusScreen extends StatefulWidget {
 
 class _StatusScreenState extends State<StatusScreen> {
   Profile profile;
+  bool isHomeNeedReload;
 
   _StatusScreenState(this.profile);
 
@@ -79,6 +85,7 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 
   void selectEmblem(Emblem e) async {
+    isHomeNeedReload = true;
     try {
       final user = await FirebaseAuth.instance.currentUser();
 
@@ -96,26 +103,32 @@ class _StatusScreenState extends State<StatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.bgColor.toHexColor(),
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      child: Scaffold(
         backgroundColor: AppColor.bgColor.toHexColor(),
-        title: Text(
-          'Status Kamu',
-          style: GoogleFonts.raleway(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: AppColor.bgColor.toHexColor(),
+          title: Text(
+            'Status Kamu',
+            style: GoogleFonts.raleway(
+              color: AppColor.titleColor.toHexColor(),
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          centerTitle: true,
+          actions: getAction(context),
+          iconTheme: IconThemeData(
             color: AppColor.titleColor.toHexColor(),
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
           ),
         ),
-        centerTitle: true,
-        actions: getAction(context),
-        iconTheme: IconThemeData(
-          color: AppColor.titleColor.toHexColor(),
-        ),
+        body: SingleChildScrollView(child: getContent()),
       ),
-      body: SingleChildScrollView(child: getContent()),
+      onWillPop: () async {
+        if (isHomeNeedReload) widget.onHomeNeedReload();
+        return true;
+      },
     );
   }
 
