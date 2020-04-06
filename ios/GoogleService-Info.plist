@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>590308030127-7orlrdnvotmnqrkl80p2dt5dmggv3os5.apps.googleusercontent.com</string>
+	<string>590308030127-t2i3q028f7avdfuckq41u69etkidrlrv.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.590308030127-7orlrdnvotmnqrkl80p2dt5dmggv3os5</string>
+	<string>com.googleusercontent.apps.590308030127-t2i3q028f7avdfuckq41u69etkidrlrv</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAODK8-14Wgp7n5nwJsx9-nU-IT7KWm2Kk</string>
+	<string>AIzaSyB57Hm8-7ExbxrAVuL5gps6kMlkPk16HUg</string>
 	<key>GCM_SENDER_ID</key>
 	<string>590308030127</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.buahbatu.dirumahaja.ios</string>
+	<string>id.miloo.dirumahaja.debug</string>
 	<key>PROJECT_ID</key>
 	<string>dirumahaja-challenge</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:590308030127:ios:ef0cd2e790c0e53c69c65a</string>
+	<string>1:590308030127:ios:684d9d54fdc2101d69c65a</string>
 	<key>DATABASE_URL</key>
 	<string>https://dirumahaja-challenge.firebaseio.com</string>
 </dict>

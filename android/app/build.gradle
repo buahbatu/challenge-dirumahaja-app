@@ -52,7 +52,6 @@ android {
             minifyEnabled true
             useProguard true
             resValue "string", "app_name", "Ayok #dirumahaja"
-            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
