@@ -9,9 +9,15 @@ import 'package:google_fonts/google_fonts.dart';
 class FriendScreen extends StatelessWidget {
   final String username;
   final String imagePath;
+  final String downloadLink;
   final List<Friend> friendList;
 
-  FriendScreen(this.username, this.imagePath, this.friendList);
+  FriendScreen(
+    this.username,
+    this.imagePath,
+    this.friendList,
+    this.downloadLink,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,11 @@ class FriendScreen extends StatelessWidget {
             icon: Icon(Icons.share),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => ShareScreen(username, imagePath),
+                builder: (ctx) => ShareScreen(
+                  username,
+                  imagePath,
+                  downloadLink,
+                ),
               ));
             },
           )

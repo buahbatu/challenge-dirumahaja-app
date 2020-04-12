@@ -13,10 +13,12 @@ import 'package:wc_flutter_share/wc_flutter_share.dart';
 class ShareScreen extends StatefulWidget {
   final String username;
   final String imagePath;
+  final String downloadLink;
 
   const ShareScreen(
     this.username,
-    this.imagePath, {
+    this.imagePath,
+    this.downloadLink, {
     Key key,
   }) : super(key: key);
   @override
@@ -293,7 +295,7 @@ class _ShareScreenState extends State<ShareScreen> {
           ),
         ),
         Text(
-          'https://s.id/ayokdirumahaja',
+          widget.downloadLink,
           style: GoogleFonts.raleway(
             fontSize: 14,
             color: Colors.white,

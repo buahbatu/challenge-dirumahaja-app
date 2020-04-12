@@ -50,6 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Profile profile;
   List<Notif> notifList = [];
   String prixaLink = "";
+  String downloadLink = "";
 
   @override
   void initState() {
@@ -85,6 +86,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     String localAppNumber = packageInfo.buildNumber;
     bool isUpdateExist = remoteAppNumber.compareTo(localAppNumber) > 0;
+
+    downloadLink = jsonVersions['app_download_link'];
 
     if (isUpdateExist) {
       final updateLink = jsonVersions['app_update_link'];
@@ -238,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Container(height: 32),
         getTopbar(),
-        StatusBoard(profile, () => reload()),
+        StatusBoard(profile, () => reload(), downloadLink),
         getUserPin(),
         Expanded(child: Container()),
         getMainMenu(),
@@ -485,6 +488,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 notifList,
                 profile.username,
                 profile.emblemImgUrl,
+                downloadLink,
               ),
             ));
           },

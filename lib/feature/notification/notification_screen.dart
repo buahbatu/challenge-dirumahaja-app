@@ -11,12 +11,14 @@ import 'package:url_launcher/url_launcher.dart';
 class NotificationScreen extends StatefulWidget {
   final String username;
   final String imagePath;
+  final String downloadLink;
   final List<Notif> notifs;
 
   const NotificationScreen(
     this.notifs,
     this.username,
-    this.imagePath, {
+    this.imagePath,
+    this.downloadLink, {
     Key key,
   }) : super(key: key);
 
@@ -101,6 +103,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 builder: (ctx) => ShareScreen(
                   widget.username,
                   widget.imagePath,
+                  widget.downloadLink,
                 ),
               ));
             },

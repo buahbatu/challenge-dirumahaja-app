@@ -16,10 +16,12 @@ import 'package:google_fonts/google_fonts.dart';
 class StatusBoard extends StatefulWidget {
   final Profile profile;
   final VoidCallback onHomeNeedReload;
+  final String downloadLink;
 
   StatusBoard(
     this.profile,
-    this.onHomeNeedReload, {
+    this.onHomeNeedReload,
+    this.downloadLink, {
     Key key,
   }) : super(key: key);
 
@@ -161,6 +163,7 @@ class _StatusBoardState extends State<StatusBoard> {
                     widget.profile?.username ?? '',
                     widget.profile?.emblemImgUrl ?? '',
                     friendList,
+                    widget.downloadLink,
                   ),
                 ),
               );
@@ -212,6 +215,7 @@ class _StatusBoardState extends State<StatusBoard> {
                 builder: (ctx) => ShareScreen(
                   widget.profile?.username ?? '',
                   widget.profile?.emblemImgUrl ?? '',
+                  widget.downloadLink,
                 ),
               ));
             },
