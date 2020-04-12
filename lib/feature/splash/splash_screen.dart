@@ -5,6 +5,7 @@ import 'package:dirumahaja/core/tools/location_updater.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,17 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     initPlatformState();
+    setupRemoteConfig();
     checkLoginState();
     showButton();
+  }
+
+  void setupRemoteConfig() async {
+    // setup remote config
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    await remoteConfig.fetch(expiration: const Duration(minutes: 1));
+    // await remoteConfig.fetch(expiration: const Duration(hours: 5));
+    await remoteConfig.activateFetched();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -66,6 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void showButton() async {
     await Future.delayed(Duration(seconds: 3));
+    if (!mounted) return;
     setState(() {
       _heightButton = 52;
       _widthButton = double.infinity;

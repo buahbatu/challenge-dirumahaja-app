@@ -1,10 +1,13 @@
+import 'dart:convert';
+
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:dirumahaja/core/entity/entity_rule.dart';
 
-class RuleBox extends StatelessWidget {
+class RuleBox extends StatefulWidget {
   final double height;
   const RuleBox({
     Key key,
@@ -12,54 +15,42 @@ class RuleBox extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _RuleBoxState createState() => _RuleBoxState();
+}
+
+class _RuleBoxState extends State<RuleBox> {
+  List<Rule> rules = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadRules();
+  }
+
+  void loadRules() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final rawActivity = remoteConfig.getString('game_rule');
+    print(rawActivity);
+    final jsonActivity = jsonDecode(rawActivity);
+    setState(() {
+      rules = Rule.fromJsonList(jsonActivity);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        height: height,
+        height: widget.height,
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: getRules().map((r) => createItem(r)).toList(),
+          children: rules.map((r) => createItem(r)).toList(),
         ),
       ),
     );
-  }
-
-  List<Rule> getRules() {
-    return [
-      Rule('Pastikan Koneksi GPS Tersedia', true),
-      Rule('Pastikan Koneksi Internet Lancar', true),
-      Rule(
-        'Jangan keluar dari lingkungan rumah \n(500 m dari titik rumah)',
-        true,
-      ),
-      Rule(
-        'Buat persiapan sebelum memulai tantangan (makanan, minum, obat, dll)',
-        false,
-      ),
-      Rule(
-        'Kamu akan memulai dengan 1 energi',
-        false,
-      ),
-      Rule(
-        'Energi mu akan berkurang jika tidak memenuhi poin 1,2,3',
-        false,
-      ),
-      Rule(
-        'Energi mu bisa bertambah jika teman mu kehabisan Energi',
-        false,
-      ),
-      Rule(
-        'Jika kamu kehabisan energi, perhitungan hari mu tidak akan bertambah',
-        false,
-      ),
-      Rule(
-        'Jika kamu kehabisan energi, kamu harus menjalankan hukuman terlebih dahulu untuk memulai kembali dari 0',
-        false,
-      ),
-    ];
   }
 
   Row createItem(Rule rule) {

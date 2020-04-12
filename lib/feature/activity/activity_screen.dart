@@ -1,11 +1,37 @@
+import 'dart:convert';
+
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/entity/entity_activity.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ActivityScreen extends StatelessWidget {
+class ActivityScreen extends StatefulWidget {
+  @override
+  _ActivityScreenState createState() => _ActivityScreenState();
+}
+
+class _ActivityScreenState extends State<ActivityScreen> {
+  List<Activity> resources = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadActivities();
+  }
+
+  void loadActivities() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final rawActivity = remoteConfig.getString('productive_activity');
+    print(rawActivity);
+    final jsonActivity = jsonDecode(rawActivity);
+    setState(() {
+      resources = Activity.fromJsonList(jsonActivity);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,57 +79,4 @@ class ActivityScreen extends StatelessWidget {
       ),
     );
   }
-
-  final resources = [
-    Activity(
-      AppImages.learnCodeSvg,
-      'Belajar Design',
-      'https://dirumahaja.xyz/belajar-ux-ui-design/',
-    ),
-    Activity(
-      AppImages.readBookSvg,
-      'Baca Buku',
-      'https://dirumahaja.xyz/buku-bacaan/',
-    ),
-    Activity(
-      AppImages.videoPodcastSvg,
-      'Video & Podcast',
-      'https://dirumahaja.xyz/video-podcast/',
-    ),
-    Activity(
-      AppImages.cariCuanSvg,
-      'Cari Cuan',
-      'https://dirumahaja.xyz/freelance-tools/',
-    ),
-    Activity(
-      AppImages.shoppingSvg,
-      'Belanja Diskon',
-      'https://m.bukalapak.com/promo-campaign/asikdirumah',
-    ),
-    Activity(
-      AppImages.nontonKonserSvg,
-      'Nonton Konser',
-      'www.digitalconcerthall.com',
-    ),
-    Activity(
-      AppImages.museumVitualSvg,
-      'Tur Virtual',
-      'https://artsandculture.google.com/',
-    ),
-    Activity(
-      AppImages.donasiSvg,
-      'Donasi Kebaikan',
-      'https://m.tokopedia.com/discovery/salam-donasicovid19',
-    ),
-    Activity(
-      AppImages.learnCodeSvg,
-      'Belajar Koding',
-      'https://www.codecademy.com/',
-    ),
-    Activity(
-      AppImages.kajianSvg,
-      'Denger Kajian',
-      'https://m.youtube.com/channel/UCVes0G5DqPa3ZHPL4W2OrhA',
-    ),
-  ];
 }
