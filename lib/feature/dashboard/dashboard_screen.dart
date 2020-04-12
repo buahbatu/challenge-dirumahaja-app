@@ -379,7 +379,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         RaisedButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => NotificationScreen(notifList),
+              builder: (ctx) => NotificationScreen(
+                notifList,
+                profile.username,
+                profile.emblemImgUrl,
+              ),
             ));
           },
           color: Colors.white,
