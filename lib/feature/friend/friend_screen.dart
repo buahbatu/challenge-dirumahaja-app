@@ -1,16 +1,46 @@
+import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FriendScreen extends StatelessWidget {
+class FriendScreen extends StatefulWidget {
   final String username;
   final String imagePath;
 
   FriendScreen(this.username, this.imagePath);
+
+  @override
+  _FriendScreenState createState() => _FriendScreenState();
+}
+
+class _FriendScreenState extends State<FriendScreen> {
+  List<Friend> resources = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadFriends();
+  }
+
+  void loadFriends() async {
+    final user = await FirebaseAuth.instance.currentUser();
+
+    final request = await Api().getDio().get<Map<String, dynamic>>(
+          '/profile/relation?cache=false',
+          options: Options(headers: {'uid': user.uid}),
+        );
+
+    final friends = Friend.fromMapList(request.data['data']);
+    setState(() {
+      resources = friends;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +63,8 @@ class FriendScreen extends StatelessWidget {
             icon: Icon(Icons.share),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => ShareScreen(username, imagePath),
+                builder: (ctx) =>
+                    ShareScreen(widget.username, widget.imagePath),
               ));
             },
           )
@@ -130,7 +161,7 @@ class FriendScreen extends StatelessWidget {
           ),
         ),
         Text(
-          f.locationName,
+          f.locationName ?? 'Unknown',
           style: GoogleFonts.muli(
             color: AppColor.bodyColor.toHexColor(),
           ),
@@ -157,13 +188,4 @@ class FriendScreen extends StatelessWidget {
       ],
     );
   }
-
-  final resources = <Friend>[
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-    // Friend(AppImages.heroPng, 'RaviDewaBucin', 'Jakarta', 'Corona Hero', 11, 1),
-  ];
 }

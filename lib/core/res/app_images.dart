@@ -19,8 +19,12 @@ extension AppImages on String {
     String semanticsLabel,
     bool excludeFromSemantics = false,
   }) {
+    final defaultDomain = "https://dirumahaja.miloo.id/";
+    final domainSplit = this.split(defaultDomain);
+    final assetPath = domainSplit.length > 1 ? domainSplit[1] : this;
+    
     return SvgPicture.network(
-      'https://dirumahaja-challenge.web.app/' + this,
+      'https://dirumahaja-challenge.web.app/' + assetPath,
       key: key,
       headers: headers,
       width: width,
@@ -60,9 +64,13 @@ extension AppImages on String {
     BlendMode colorBlendMode,
     Duration placeholderFadeInDuration,
   }) {
+    final defaultDomain = "https://dirumahaja.miloo.id/";
+    final domainSplit = this.split(defaultDomain);
+    final assetPath = domainSplit.length > 1 ? domainSplit[1] : this;
+
     return CachedNetworkImage(
       key: key,
-      imageUrl: 'https://dirumahaja-challenge.web.app/' + this,
+      imageUrl: 'https://dirumahaja-challenge.web.app/' + assetPath,
       imageBuilder: imageBuilder,
       placeholder: placeholder,
       errorWidget: errorWidget,
