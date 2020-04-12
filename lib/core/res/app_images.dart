@@ -1,17 +1,17 @@
-import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 extension AppImages on String {
   SvgPicture toSvgPicture({
     Key key,
-    bool matchTextDirection = false,
-    AssetBundle bundle,
-    String package,
+    Map<String, String> headers,
     double width,
     double height,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
+    bool matchTextDirection = false,
     bool allowDrawingOutsideViewBox = false,
     WidgetBuilder placeholderBuilder,
     Color color,
@@ -19,16 +19,15 @@ extension AppImages on String {
     String semanticsLabel,
     bool excludeFromSemantics = false,
   }) {
-    return SvgPicture.asset(
-      this,
+    return SvgPicture.network(
+      'https://dirumahaja-challenge.web.app/' + this,
       key: key,
-      matchTextDirection: matchTextDirection,
-      bundle: bundle,
-      package: package,
+      headers: headers,
       width: width,
       height: height,
       fit: fit,
       alignment: alignment,
+      matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder: placeholderBuilder,
       color: color,
@@ -38,82 +37,86 @@ extension AppImages on String {
     );
   }
 
-  Image toPngImage({
+  Widget toPngImage({
     Key key,
-    AssetBundle bundle,
-    ImageFrameBuilder frameBuilder,
-    String semanticLabel,
-    bool excludeFromSemantics = false,
-    double scale,
+    ImageWidgetBuilder imageBuilder,
+    PlaceholderWidgetBuilder placeholder,
+    LoadingErrorWidgetBuilder errorWidget,
+    Duration fadeOutDuration = const Duration(milliseconds: 1000),
+    Curve fadeOutCurve = Curves.easeOut,
+    Duration fadeInDuration = const Duration(milliseconds: 500),
+    Curve fadeInCurve = Curves.easeIn,
     double width,
     double height,
-    Color color,
-    BlendMode colorBlendMode,
     BoxFit fit,
     Alignment alignment = Alignment.center,
     ImageRepeat repeat = ImageRepeat.noRepeat,
-    Rect centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
-    String package,
+    Map<String, String> httpHeaders,
+    BaseCacheManager cacheManager,
+    bool useOldImageOnUrlChange = false,
+    Color color,
     FilterQuality filterQuality = FilterQuality.low,
-    int cacheWidth,
-    int cacheHeight,
+    BlendMode colorBlendMode,
+    Duration placeholderFadeInDuration,
   }) {
-    return Image.asset(
-      this,
-      frameBuilder: frameBuilder,
-      semanticLabel: semanticLabel,
-      excludeFromSemantics: excludeFromSemantics,
-      scale: scale,
+    return CachedNetworkImage(
+      key: key,
+      imageUrl: 'https://dirumahaja-challenge.web.app/' + this,
+      imageBuilder: imageBuilder,
+      placeholder: placeholder,
+      errorWidget: errorWidget,
+      fadeOutDuration: fadeOutDuration,
+      fadeOutCurve: fadeOutCurve,
+      fadeInDuration: fadeInDuration,
+      fadeInCurve: fadeInCurve,
       width: width,
       height: height,
-      color: color,
-      colorBlendMode: colorBlendMode,
       fit: fit,
       alignment: alignment,
       repeat: repeat,
-      centerSlice: centerSlice,
       matchTextDirection: matchTextDirection,
-      gaplessPlayback: gaplessPlayback,
-      package: package,
+      httpHeaders: httpHeaders,
+      cacheManager: cacheManager,
+      useOldImageOnUrlChange: useOldImageOnUrlChange,
+      color: color,
       filterQuality: filterQuality,
-      cacheWidth: cacheWidth,
-      cacheHeight: cacheHeight,
+      colorBlendMode: colorBlendMode,
+      placeholderFadeInDuration: placeholderFadeInDuration,
     );
   }
 
   // svg
-  static final bellSvg = 'assets/svg/bell.svg';
-  static final helpSvg = 'assets/svg/help.svg';
-  static final pinSvg = 'assets/svg/pin.svg';
-  static final energySvg = 'assets/svg/energy.svg';
-  static final nightShadeSvg = 'assets/svg/shade-night.svg';
-  static final noonShadeSvg = 'assets/svg/shade-night.svg';
-  static final assestmentSvg = 'assets/svg/assestment.svg';
+  static final bellSvg = 'assets/img/app/svg/bell.svg';
+  static final helpSvg = 'assets/img/app/svg/help.svg';
+  static final pinSvg = 'assets/img/app/svg/pin.svg';
+  static final energySvg = 'assets/img/app/svg/energy.svg';
+  static final nightShadeSvg = 'assets/img/app/svg/shade-night.svg';
+  static final noonShadeSvg = 'assets/img/app/svg/shade-night.svg';
+  static final assestmentSvg = 'assets/img/app/svg/assestment.svg';
   // TODO: move to configs - productivity
-  static final cariCuanSvg = 'assets/svg/cari-cuan.svg';
-  static final donasiSvg = 'assets/svg/donasi.svg';
-  static final kajianSvg = 'assets/svg/kajian.svg';
-  static final learnCodeSvg = 'assets/svg/learn-code.svg';
-  static final learnDesignSvg = 'assets/svg/learn-design.svg';
-  static final museumVitualSvg = 'assets/svg/museum-virtual.svg';
-  static final nontonKonserSvg = 'assets/svg/nonton-konser.svg';
-  static final readBookSvg = 'assets/svg/read-book.svg';
-  static final shoppingSvg = 'assets/svg/shopping.svg';
-  static final videoPodcastSvg = 'assets/svg/video-podcast.svg';
-  static final tearSvg = 'assets/svg/tear.svg';
-  static final happySvg = 'assets/svg/happy.svg';
+  static final cariCuanSvg = 'assets/img/app/svg/cari-cuan.svg';
+  static final donasiSvg = 'assets/img/app/svg/donasi.svg';
+  static final kajianSvg = 'assets/img/app/svg/kajian.svg';
+  static final learnCodeSvg = 'assets/img/app/svg/learn-code.svg';
+  static final learnDesignSvg = 'assets/img/app/svg/learn-design.svg';
+  static final museumVitualSvg = 'assets/img/app/svg/museum-virtual.svg';
+  static final nontonKonserSvg = 'assets/img/app/svg/nonton-konser.svg';
+  static final readBookSvg = 'assets/img/app/svg/read-book.svg';
+  static final shoppingSvg = 'assets/img/app/svg/shopping.svg';
+  static final videoPodcastSvg = 'assets/img/app/svg/video-podcast.svg';
+  static final tearSvg = 'assets/img/app/svg/tear.svg';
+  static final happySvg = 'assets/img/app/svg/happy.svg';
 
   // png
-  static final homeBgPng = 'assets/png/home-bg.png';
-  static final homeBgSmallPng = 'assets/png/home-bg-small.png';
-  static final homeBgMediumPng = 'assets/png/home-bg-medium.png';
-  static final cloudBgPng = 'assets/png/cloud-bg.png';
-  static final cloudBg2Png = 'assets/png/cloud-bg-2.png';
-  static final heroPng = 'assets/png/hero.png';
-  static final productivePng = 'assets/png/productive.png';
-  static final playstorePng = 'assets/png/playstore.png';
-  static final appstorePng = 'assets/png/appstore.png';
-  static final milooLogoPng = 'assets/png/miloo-logo.png';
+  static final homeBgPng = 'assets/img/app/png/home-bg.png';
+  static final homeBgSmallPng = 'assets/img/app/png/home-bg-small.png';
+  static final homeBgMediumPng = 'assets/img/app/png/home-bg-medium.png';
+  static final cloudBgPng = 'assets/img/app/png/cloud-bg.png';
+  static final cloudBg2Png = 'assets/img/app/png/cloud-bg-2.png';
+  static final heroPng = 'assets/img/app/png/hero.png';
+  static final productivePng = 'assets/img/app/png/productive.png';
+  static final playstorePng = 'assets/img/app/png/playstore.png';
+  static final appstorePng = 'assets/img/app/png/appstore.png';
+  static final milooLogoPng = 'assets/img/app/png/miloo-logo.png';
 }
