@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.buahbatu.dirumahaja"
+        applicationId "com.buahbatu.dirumahaja.android"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

@@ -1,4 +1,4 @@
-package com.buahbatu.dirumahaja
+package com.buahbatu.dirumahaja.android
 
 import io.flutter.embedding.android.FlutterActivity
 

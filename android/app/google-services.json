@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:590308030127:android:d79100e0659c13ea69c65a",
+        "mobilesdk_app_id": "1:590308030127:android:a7e560c24367115a69c65a",
         "android_client_info": {
-          "package_name": "com.buahbatu.dirumahaja"
+          "package_name": "com.buahbatu.dirumahaja.android"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "590308030127-2tq9mar34lnu9o7cemb38dbnviljk9ru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buahbatu.dirumahaja.android",
+            "certificate_hash": "86b4e2cdaca5eb4747154b8593486002578436ff"
+          }
+        },
         {
           "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
           "client_type": 3
@@ -21,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA6xgjj8n0Ua-KzssTtkptO3WuN2UWXp-M"
+          "current_key": "AIzaSyAuVAheLArZutjMc5o5Q1hAQxmh1W9WTgs"
         }
       ],
       "services": {
@@ -32,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "590308030127-prdik1rkjp5j3o4s2p3bm7gv746v9cg5.apps.googleusercontent.com",
+              "client_id": "590308030127-t2i3q028f7avdfuckq41u69etkidrlrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.buahbatu.dirumahaja.debug"
+                "bundle_id": "id.miloo.dirumahaja.debug"
               }
             }
           ]
@@ -44,12 +52,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:590308030127:android:d315ec1a89a52bec69c65a",
+        "mobilesdk_app_id": "1:590308030127:android:00e5d99c972fc6b469c65a",
         "android_client_info": {
-          "package_name": "com.buahbatu.dirumahaja.debug"
+          "package_name": "com.buahbatu.dirumahaja.android.debug"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "590308030127-rf8eatnvljmgqbiigij6e865k70q2ev3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buahbatu.dirumahaja.android.debug",
+            "certificate_hash": "bfbfb8e4d008c20e188ec74c1c4687bcd20217d3"
+          }
+        },
         {
           "client_id": "590308030127-4eq6sjp6udpt7pgt9aegmb9ahpd12gnk.apps.googleusercontent.com",
           "client_type": 3
@@ -57,7 +73,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA6xgjj8n0Ua-KzssTtkptO3WuN2UWXp-M"
+          "current_key": "AIzaSyAuVAheLArZutjMc5o5Q1hAQxmh1W9WTgs"
         }
       ],
       "services": {
@@ -68,10 +84,10 @@
               "client_type": 3
             },
             {
-              "client_id": "590308030127-prdik1rkjp5j3o4s2p3bm7gv746v9cg5.apps.googleusercontent.com",
+              "client_id": "590308030127-t2i3q028f7avdfuckq41u69etkidrlrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.buahbatu.dirumahaja.debug"
+                "bundle_id": "id.miloo.dirumahaja.debug"
               }
             }
           ]
