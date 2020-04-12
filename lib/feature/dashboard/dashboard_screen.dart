@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dirumahaja/core/entity/entity_credit.dart';
 import 'package:dirumahaja/core/entity/entity_notif.dart';
 import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
@@ -11,6 +13,7 @@ import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Color userNameColor = Colors.black;
   Profile profile;
   List<Notif> notifList = [];
+  String prixaLink = "";
 
   @override
   void initState() {
@@ -39,6 +43,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkTimeBackground();
     loadProfile();
     loadNotification();
+    loadCredits();
+  }
+
+  void loadCredits() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final rawCredits = remoteConfig.getString('game_credit');
+    final jsonCredits = jsonDecode(rawCredits);
+    final credits = Credit.fromJsonList(jsonCredits);
+    setState(() {
+      prixaLink = credits.where((c) => c.link.contains('prixa.ai')).first.link;
+    });
   }
 
   void checkTimeBackground() {
@@ -147,9 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       onPressed: () {
-        launch(
-          'https://covid19.prixa.ai/partner/54cf601f-ca6f-4eab-b2fa-052b46f626c7/app/95da3cd5-182c-44c4-a452-d83f045f103b',
-        );
+        if (prixaLink.isNotEmpty) launch(prixaLink);
       },
     );
   }
