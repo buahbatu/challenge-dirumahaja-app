@@ -25,7 +25,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
   void loadActivities() async {
     RemoteConfig remoteConfig = await RemoteConfig.instance;
     final rawActivity = remoteConfig.getString('productive_activity');
-    print(rawActivity);
     final jsonActivity = jsonDecode(rawActivity);
     setState(() {
       resources = Activity.fromJsonList(jsonActivity);

@@ -147,7 +147,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       onPressed: () {
-        launch('https://prixa.ai/corona');
+        launch(
+          'https://covid19.prixa.ai/partner/54cf601f-ca6f-4eab-b2fa-052b46f626c7/app/95da3cd5-182c-44c4-a452-d83f045f103b',
+        );
       },
     );
   }

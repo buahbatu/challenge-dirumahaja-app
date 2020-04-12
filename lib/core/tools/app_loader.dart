@@ -15,7 +15,7 @@ class AppLoader {
 
     // kill currently ongoing task, becaus opening the app will do check in
     BackgroundFetch.stop().then((int status) {
-      print('[BackgroundFetch] stop success: $status');
+      // print('[BackgroundFetch] stop success: $status');
     });
     // Register to receive BackgroundFetch events after app is terminated.
     // Requires {stopOnTerminate: false, enableHeadless: true}

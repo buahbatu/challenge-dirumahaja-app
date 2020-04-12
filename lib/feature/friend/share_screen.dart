@@ -69,7 +69,7 @@ class _ShareScreenState extends State<ShareScreen> {
         bytesOfFile: pngBytes,
       );
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 

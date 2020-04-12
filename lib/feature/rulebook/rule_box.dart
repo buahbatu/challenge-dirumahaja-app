@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:dirumahaja/core/entity/entity_rule.dart';
 
 class RuleBox extends StatefulWidget {
@@ -29,11 +27,10 @@ class _RuleBoxState extends State<RuleBox> {
 
   void loadRules() async {
     RemoteConfig remoteConfig = await RemoteConfig.instance;
-    final rawActivity = remoteConfig.getString('game_rule');
-    print(rawActivity);
-    final jsonActivity = jsonDecode(rawActivity);
+    final rawRules = remoteConfig.getString('game_rule');
+    final jsonRules = jsonDecode(rawRules);
     setState(() {
-      rules = Rule.fromJsonList(jsonActivity);
+      rules = Rule.fromJsonList(jsonRules);
     });
   }
 

@@ -57,20 +57,20 @@ class _SplashScreenState extends State<SplashScreen>
       // for taking too long in the background.
       BackgroundFetch.finish(taskId);
     }).then((int status) {
-      print('[BackgroundFetch] configure success: $status');
+      // print('[BackgroundFetch] configure success: $status');
     }).catchError((e) {
-      print('[BackgroundFetch] configure ERROR: $e');
+      // print('[BackgroundFetch] configure ERROR: $e');
     });
 
     // Optionally query the current BackgroundFetch status.
     int status = await BackgroundFetch.status;
-    print(status);
+    // print(status);
 
     BackgroundFetch.start().then((int status) {
-      print('[BackgroundFetch] start success: $status');
-      print('[BackgroundFetch] start at: ${DateTime.now()}');
+      // print('[BackgroundFetch] start success: $status');
+      // print('[BackgroundFetch] start at: ${DateTime.now()}');
     }).catchError((e) {
-      print('[BackgroundFetch] start FAILURE: $e');
+      // print('[BackgroundFetch] start FAILURE: $e');
     });
   }
 

@@ -14,9 +14,9 @@ class LocationUpdater {
     final location = await Geolocator().getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    final randHour = Random().nextInt(23) + 1;
+    // final randHour = Random().nextInt(23) + 1;
     final user = await FirebaseAuth.instance.currentUser();
-    final nextCheckIn = DateTime.now().add(Duration(hours: randHour));
+    // final nextCheckIn = DateTime.now().add(Duration(hours: randHour));
 
     final checkInResult = await Api().post<CheckIn>(
       path: '/session/checkin',
@@ -24,13 +24,13 @@ class LocationUpdater {
       headers: {'uid': user.uid},
       body: {
         "coordinate": "${location.latitude}, ${location.longitude}",
-        "next_checkin": "",
+        // "next_checkin": nextCheckIn.toString(),
       },
     );
 
-    print(
-      "send coordinate = $source: ${location.latitude}, ${location.longitude}",
-    );
+    // print(
+    //   "send coordinate = $source: ${location.latitude}, ${location.longitude}",
+    // );
 
     onResult?.call(checkInResult);
   }

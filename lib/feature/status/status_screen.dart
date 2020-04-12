@@ -96,7 +96,7 @@ class _StatusScreenState extends State<StatusScreen> {
 
       loadProfile();
     } catch (error) {
-      print(error);
+      // print(error);
     }
   }
 
