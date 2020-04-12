@@ -13,6 +13,7 @@ import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
@@ -23,6 +24,22 @@ import 'package:url_launcher/url_launcher.dart';
 class DashboardScreen extends StatefulWidget {
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+/// This "Headless Notif Handler" is run when app is terminated.
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  print('onBackground : $message');
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
@@ -113,6 +130,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       this.profile = profile.copyWith(locationName: city);
     });
+
+    setupFCM(profile.username);
+  }
+
+  void setupFCM(String username) async {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.subscribeToTopic(username);
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        // _showItemDialog(message);
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(sound: true, badge: true, alert: true),
+    );
+    _firebaseMessaging.onIosSettingsRegistered.listen(
+      (IosNotificationSettings settings) {
+        print("Settings registered: $settings");
+      },
+    );
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/network/remote_env.dart';
 import 'package:dirumahaja/core/tools/location_updater.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
@@ -29,6 +30,9 @@ class AppLoader {
 
     // Pass all uncaught errors from the framework to Crashlytics.
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.setAutoInitEnabled(true);
   }
 
   /// This "Headless Task" is run when app is terminated.

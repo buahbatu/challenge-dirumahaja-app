@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 bool isDebug = false;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runZoned<Future<void>>(() async {
     // run on splash screen
     await AppLoader.get().onAppStart(isDebug: isDebug);
 
-    WidgetsFlutterBinding.ensureInitialized();
     runApp(MyApp());
   }, onError: Crashlytics.instance.recordError);
 }
