@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -58,6 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void reload() {
     checkTimeBackground();
+    checkVersion();
     loadProfile();
     loadNotification();
     loadCredits();
@@ -71,6 +73,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       prixaLink = credits.where((c) => c.link.contains('prixa.ai')).first.link;
     });
+  }
+
+  void checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final rawVersions = remoteConfig.getString('versions');
+    final jsonVersions = jsonDecode(rawVersions);
+    final remoteAppNumber = jsonVersions['app'];
+
+    String localAppNumber = packageInfo.buildNumber;
+    bool isUpdateExist = remoteAppNumber.compareTo(localAppNumber) > 0;
+
+    if (isUpdateExist) {
+      final updateLink = jsonVersions['app_update_link'];
+      showUpdateDialog(updateLink);
+    }
+  }
+
+  void showUpdateDialog(String link) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(14),
+          children: <Widget>[
+            Text(
+              'Terdapat versi terbaru',
+              style: GoogleFonts.raleway(
+                color: AppColor.titleColor.toHexColor(),
+                fontWeight: FontWeight.w800,
+                fontSize: 18,
+              ),
+            ),
+            Container(height: 12),
+            Text(
+              'Yuk lakukan udpate aplikasi, agar mendapatkan fitur terbaru',
+              style: GoogleFonts.raleway(fontSize: 14),
+            ),
+            Container(height: 12),
+            FlatButton(
+              color: AppColor.titleColor.toHexColor(),
+              textColor: Colors.white,
+              child: Text('Download Update'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(color: AppColor.titleColor.toHexColor()),
+              ),
+              onPressed: () => launch(link),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   void checkTimeBackground() {
