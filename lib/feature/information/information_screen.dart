@@ -160,7 +160,7 @@ class _InformationScreenState extends State<InformationScreen> {
           style: GoogleFonts.muli(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 12,
+            fontSize: 10,
           ),
         ),
         shape: RoundedRectangleBorder(

@@ -172,6 +172,7 @@ class _StatusBoardState extends State<StatusBoard> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ...friendList
+                    .take(3)
                     .map((f) => createImage(f?.emblemImgUrl ?? ''))
                     .toList(),
                 if (friendList.length > 3)

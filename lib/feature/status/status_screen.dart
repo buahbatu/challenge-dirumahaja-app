@@ -136,7 +136,11 @@ class _StatusScreenState extends State<StatusScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Stack(
-          children: <Widget>[getUserInfo(), getUserPin()],
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            getUserInfo(),
+            getUserPin(),
+          ],
         ),
         getBannerCard(),
         Container(height: 16),
@@ -173,6 +177,7 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 
   Widget getOptions() {
+    final imageSize = ((MediaQuery.of(context).size.width - 40) / 2) - 122;
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 2,
@@ -181,11 +186,11 @@ class _StatusScreenState extends State<StatusScreen> {
       childAspectRatio: 1.3,
       padding: const EdgeInsets.all(16),
       physics: NeverScrollableScrollPhysics(),
-      children: emblemList.map((e) => getOptionCard(e)).toList(),
+      children: emblemList.map((e) => getOptionCard(e, imageSize)).toList(),
     );
   }
 
-  Widget getOptionCard(Emblem e) {
+  Widget getOptionCard(Emblem e, double size) {
     return Material(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       elevation: 1,
@@ -195,7 +200,7 @@ class _StatusScreenState extends State<StatusScreen> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              createImage(e.imgUrl ?? '', 64, 2, Colors.blue),
+              createImage(e.imgUrl ?? '', size, 2, Colors.blue),
               Container(height: 12),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -220,85 +225,91 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 
   Widget getBannerCard() {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 90),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      color: HexColor('FF5C76'),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              height: 10,
-              width: 10,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.bgColor.toHexColor(),
+    return Container(
+      width: 400,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 90),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        color: HexColor('FF5C76'),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.bgColor.toHexColor(),
+                ),
               ),
-            ),
-            Text(
-              'Koleksi Emblem kamu',
-              style: GoogleFonts.muli(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              Text(
+                'Koleksi Emblem kamu',
+                style: GoogleFonts.muli(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Container(
-              height: 10,
-              width: 10,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.bgColor.toHexColor(),
+              Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.bgColor.toHexColor(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget getUserInfo() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: const EdgeInsets.all(58),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            Container(height: 70),
-            getStatusBar(),
-            Container(height: 24),
-            Text(
-              profile?.username ?? '',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.muli(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.black.withOpacity(0.7),
-              ),
-            ),
-            Text(
-              profile?.locationName ?? '',
-              style: GoogleFonts.muli(
-                fontSize: 18,
-                color: Colors.black.withOpacity(0.7),
-              ),
-            ),
-            Container(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                AppImages.energySvg.toSvgPicture(width: 10),
-                Container(width: 6),
-                Text(
-                  profile?.sessionHealth.toString() ?? '',
-                  style: GoogleFonts.muli(color: Colors.black87),
+    return Container(
+      width: 300,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        margin: const EdgeInsets.symmetric(vertical: 58),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: <Widget>[
+              Container(height: 70),
+              getStatusBar(),
+              Container(height: 24),
+              Text(
+                profile?.username ?? '',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.muli(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black.withOpacity(0.7),
                 ),
-              ],
-            ),
-          ],
+              ),
+              Text(
+                profile?.locationName ?? '',
+                style: GoogleFonts.muli(
+                  fontSize: 18,
+                  color: Colors.black.withOpacity(0.7),
+                ),
+              ),
+              Container(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AppImages.energySvg.toSvgPicture(width: 10),
+                  Container(width: 6),
+                  Text(
+                    profile?.sessionHealth.toString() ?? '',
+                    style: GoogleFonts.muli(color: Colors.black87),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

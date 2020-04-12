@@ -65,7 +65,7 @@ class _ShareScreenState extends State<ShareScreen> {
       await WcFlutterShare.share(
         sharePopupTitle: 'Bagikan Challenge',
         text: 'Ayok tunjukkan peran mu menghadapi pandemi dengan mengikuti challenge #dirumahaja. ' +
-            'Download aplikasinya di playstore atau appstore dengan nama `Ayok #dirumahaja`',
+            'Download aplikasinya di https://s.id/ayokdirumahaja',
         fileName: 'poster.png',
         mimeType: 'image/png',
         bytesOfFile: pngBytes,
