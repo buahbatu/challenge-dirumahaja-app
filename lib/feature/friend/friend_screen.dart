@@ -1,46 +1,17 @@
-import 'package:dio/dio.dart';
-import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/entity/entity_friend.dart';
 import 'package:dirumahaja/feature/friend/share_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FriendScreen extends StatefulWidget {
+class FriendScreen extends StatelessWidget {
   final String username;
   final String imagePath;
+  final List<Friend> friendList;
 
-  FriendScreen(this.username, this.imagePath);
-
-  @override
-  _FriendScreenState createState() => _FriendScreenState();
-}
-
-class _FriendScreenState extends State<FriendScreen> {
-  List<Friend> resources = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadFriends();
-  }
-
-  void loadFriends() async {
-    final user = await FirebaseAuth.instance.currentUser();
-
-    final request = await Api().getDio().get<Map<String, dynamic>>(
-          '/profile/relation?cache=false',
-          options: Options(headers: {'uid': user.uid}),
-        );
-
-    final friends = Friend.fromMapList(request.data['data']);
-    setState(() {
-      resources = friends;
-    });
-  }
+  FriendScreen(this.username, this.imagePath, this.friendList);
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +34,16 @@ class _FriendScreenState extends State<FriendScreen> {
             icon: Icon(Icons.share),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) =>
-                    ShareScreen(widget.username, widget.imagePath),
+                builder: (ctx) => ShareScreen(username, imagePath),
               ));
             },
           )
         ],
       ),
       body: ListView.builder(
-        itemCount: resources.length,
+        itemCount: friendList.length,
         padding: EdgeInsets.all(16),
-        itemBuilder: (ctx, i) => createItem(resources[i]),
+        itemBuilder: (ctx, i) => createItem(friendList[i]),
       ),
     );
   }

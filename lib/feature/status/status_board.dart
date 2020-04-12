@@ -160,6 +160,7 @@ class _StatusBoardState extends State<StatusBoard> {
                   builder: (ctx) => FriendScreen(
                     widget.profile?.username ?? '',
                     widget.profile?.emblemImgUrl ?? '',
+                    friendList,
                   ),
                 ),
               );
@@ -170,7 +171,6 @@ class _StatusBoardState extends State<StatusBoard> {
                 ...friendList
                     .map((f) => createImage(f?.emblemImgUrl ?? ''))
                     .toList(),
-                if (friendList.isEmpty) Text('Masih Kosong'),
                 if (friendList.length > 3)
                   Container(
                     width: 28,
