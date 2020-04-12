@@ -1,11 +1,35 @@
+import 'dart:convert';
+import 'package:dirumahaja/core/entity/entity_information.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/feature/information/statistic_item.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InformationScreen extends StatelessWidget {
+class InformationScreen extends StatefulWidget {
+  @override
+  _InformationScreenState createState() => _InformationScreenState();
+}
+
+class _InformationScreenState extends State<InformationScreen> {
+  List<Information> informations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadInfo();
+  }
+
+  void loadInfo() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final rawRules = remoteConfig.getString('other_news');
+    final jsonRules = jsonDecode(rawRules);
+    setState(() {
+      informations = Information.fromJsonList(jsonRules);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,20 +60,7 @@ class InformationScreen extends StatelessWidget {
           StatisticItem(),
           Container(height: 16),
           getTitle('Info Penting Lainnya', '', ''),
-          getInfoCard(
-            getHospitalGradient(),
-            'Yakin Terjangkit?',
-            'Tenang dan jangan panik, segera cek RS Rujukan di sekitar mu',
-            'Cek RS Rujukan',
-            'https://katadata.co.id/berita/2020/03/12/daftar-terbaru-132-rumah-sakit-rujukan-virus-corona',
-          ),
-          getInfoCard(
-            getNewsGradient(),
-            "What's happening?",
-            'Baca berita NO HOAX terbaru mengenai Covid19 di sekitar mu.',
-            'Lihat Berita',
-            'https://kumparan.com/topic/virus-corona-di-indonesia',
-          ),
+          ...informations.map((i) => getInfoCard(i)).toList(),
         ],
       ),
     );
@@ -86,18 +97,12 @@ class InformationScreen extends StatelessWidget {
     );
   }
 
-  Widget getInfoCard(
-    Gradient gradient,
-    String title,
-    String desc,
-    String action,
-    String url,
-  ) {
+  Widget getInfoCard(Information info) {
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        gradient: gradient,
+        gradient: info.gradient,
       ),
       child: Row(
         children: <Widget>[
@@ -108,31 +113,15 @@ class InformationScreen extends StatelessWidget {
                 horizontal: 12,
                 vertical: 21,
               ),
-              child: getDescription(title, desc),
+              child: getDescription(info.title, info.subtitle),
             ),
           ),
           Flexible(
             flex: 5,
-            child: getHospitalButton(action, url),
+            child: getHospitalButton(info.action, info.link),
           ),
         ],
       ),
-    );
-  }
-
-  Gradient getNewsGradient() {
-    return LinearGradient(
-      begin: Alignment.bottomLeft,
-      end: Alignment.bottomRight,
-      colors: [HexColor('623AA2'), HexColor('F97794')],
-    );
-  }
-
-  Gradient getHospitalGradient() {
-    return LinearGradient(
-      begin: Alignment.bottomLeft,
-      end: Alignment.bottomRight,
-      colors: [HexColor('4BA4E8'), HexColor('66C9E8')],
     );
   }
 

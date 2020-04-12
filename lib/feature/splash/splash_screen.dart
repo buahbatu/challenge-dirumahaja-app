@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
   void setupRemoteConfig() async {
     // setup remote config
     RemoteConfig remoteConfig = await RemoteConfig.instance;
-    await remoteConfig.fetch(expiration: const Duration(minutes: 1));
+    await remoteConfig.fetch(expiration: const Duration(seconds: 10));
     // await remoteConfig.fetch(expiration: const Duration(hours: 5));
     await remoteConfig.activateFetched();
   }
