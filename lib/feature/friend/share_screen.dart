@@ -275,17 +275,36 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   Widget getDownloadPanel() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: AppImages.playstorePng.toPngImage(height: 32),
+        Text(
+          'Download di',
+          style: GoogleFonts.raleway(
+            fontSize: 14,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                blurRadius: 8.0,
+                color: Colors.black.withOpacity(0.40),
+                offset: Offset(4.0, 8.0),
+              ),
+            ],
+          ),
         ),
-        Container(width: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: AppImages.appstorePng.toPngImage(height: 32),
+        Text(
+          'https://s.id/ayokdirumahaja',
+          style: GoogleFonts.raleway(
+            fontSize: 14,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                blurRadius: 8.0,
+                color: Colors.black.withOpacity(0.40),
+                offset: Offset(4.0, 8.0),
+              ),
+            ],
+          ),
         ),
       ],
     );
