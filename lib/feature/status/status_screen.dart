@@ -226,42 +226,41 @@ class _StatusScreenState extends State<StatusScreen> {
 
   Widget getBannerCard() {
     return Container(
-      width: 400,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 90),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
         color: HexColor('FF5C76'),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.bgColor.toHexColor(),
-                ),
-              ),
-              Text(
-                'Koleksi Emblem kamu',
-                style: GoogleFonts.muli(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.bgColor.toHexColor(),
-                ),
-              ),
-            ],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 10,
+            width: 10,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColor.bgColor.toHexColor(),
+            ),
           ),
-        ),
+          Container(width: 10),
+          Text(
+            'Koleksi Emblem kamu',
+            style: GoogleFonts.muli(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(width: 10),
+          Container(
+            height: 10,
+            width: 10,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColor.bgColor.toHexColor(),
+            ),
+          ),
+        ],
       ),
     );
   }

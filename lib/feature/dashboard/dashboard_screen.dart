@@ -229,6 +229,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Stack(
           children: <Widget>[
             ...getBackgrounds(),
+            getUserPin(),
             getContent(),
           ],
         ),
@@ -242,7 +243,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Container(height: 32),
         getTopbar(),
         StatusBoard(profile, () => reload(), downloadLink),
-        getUserPin(),
         Expanded(child: Container()),
         getMainMenu(),
         Container(height: 10),
@@ -349,7 +349,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget getUserPin() {
     return Column(
       children: <Widget>[
-        Container(height: 32),
+        Expanded(child: Container(), flex: 12),
         Text(
           profile?.username ?? '...',
           style: GoogleFonts.muli(color: userNameColor),
@@ -407,6 +407,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
+        Expanded(child: Container(), flex: 10),
       ],
     );
   }

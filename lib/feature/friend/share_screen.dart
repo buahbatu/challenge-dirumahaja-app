@@ -147,8 +147,8 @@ class _ShareScreenState extends State<ShareScreen> {
           alignment: Alignment.center,
           children: <Widget>[
             Container(
-              width: 112,
-              height: 112,
+              width: 128,
+              height: 128,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
