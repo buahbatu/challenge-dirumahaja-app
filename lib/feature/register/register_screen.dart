@@ -38,8 +38,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           )),
         ),
         AddressScreen(
-          onSubmit: (coordinate, locationName) =>
-              updateProfile(profile.copyWith(coordinate: coordinate)),
+          onSubmit: (coordinate, locationName) => updateProfile(
+            profile.copyWith(
+              coordinate: coordinate,
+              locationName: locationName,
+            ),
+          ),
         ),
         ChallengerScreen(
           onSubmit: (challenger) =>
