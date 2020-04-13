@@ -39,3 +39,5 @@ lib/generated_plugin_registrant.dart
 android/app/release/app-release.apk
 
 android/app/release/output.json
+
+# flutter pub get && cd ios && pod update
