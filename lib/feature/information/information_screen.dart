@@ -55,7 +55,7 @@ class _InformationScreenState extends State<InformationScreen> {
           getTitle(
             'Statistik Hari Ini',
             'Lihat Selengkapnya',
-            'https://www.covid19.bnpb.go.id/situasi-virus-corona/',
+            'https://www.covid19.go.id/situasi-virus-corona/',
           ),
           StatisticItem(),
           Container(height: 16),
