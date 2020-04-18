@@ -6,6 +6,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
+/// This "Headless Task" is run when app is terminated.
+void backgroundFetchHeadlessTask(String taskId) async {
+  // location update process
+  LocationUpdater.doCheckIn(source: 'headless');
+
+  BackgroundFetch.finish(taskId);
+}
+
 class AppLoader {
   Future<void> onAppStart({bool isDebug = false}) async {
     // setup remote enve
@@ -33,14 +41,6 @@ class AppLoader {
 
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
     _firebaseMessaging.setAutoInitEnabled(true);
-  }
-
-  /// This "Headless Task" is run when app is terminated.
-  void backgroundFetchHeadlessTask(String taskId) async {
-    // location update process
-    LocationUpdater.doCheckIn(source: 'headless');
-
-    BackgroundFetch.finish(taskId);
   }
 
   // instance

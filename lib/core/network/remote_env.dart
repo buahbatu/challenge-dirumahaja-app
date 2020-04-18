@@ -25,7 +25,10 @@ class RemoteEnv {
   /// Only access this function after set an instance
   /// call RemoteEnv.set(...) on main function
   static RemoteEnv get() {
-    ArgumentError.checkNotNull(_singleton, 'RemoteEnv');
+    // ArgumentError.checkNotNull(_singleton, 'RemoteEnv');
+    if (_singleton == null) {
+      _singleton = PRODUCTION;
+    }
     return _singleton;
   }
 

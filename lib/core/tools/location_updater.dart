@@ -29,7 +29,7 @@ class LocationUpdater {
     );
 
     // print(
-    //   "send coordinate = $source: ${location.latitude}, ${location.longitude}",
+    //   "[dirumahaja]: send coordinate = $source: ${location.latitude}, ${location.longitude}",
     // );
 
     onResult?.call(checkInResult);
