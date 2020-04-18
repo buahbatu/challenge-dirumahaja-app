@@ -29,7 +29,7 @@ class DashboardScreen extends StatefulWidget {
 
 /// This "Headless Notif Handler" is run when app is terminated.
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  print('onBackground : $message');
+  // print('onBackground : $message');
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
@@ -195,20 +195,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void setupFCM(String username) async {
+    final user = await FirebaseAuth.instance.currentUser();
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-    _firebaseMessaging.subscribeToTopic(username);
+    _firebaseMessaging.subscribeToTopic(user.uid);
     _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+        // print("onMessage: $message");
         // _showItemDialog(message);
       },
       onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        // print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        // print("onResume: $message");
       },
     );
     _firebaseMessaging.requestNotificationPermissions(
