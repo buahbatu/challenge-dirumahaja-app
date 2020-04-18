@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Color userNameColor = Colors.black;
   Profile profile;
   List<Notif> notifList = [];
-  String prixaLink = "";
+  Credit partner;
   String downloadLink = "";
 
   @override
@@ -72,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final jsonCredits = jsonDecode(rawCredits);
     final credits = Credit.fromJsonList(jsonCredits);
     setState(() {
-      prixaLink = credits.where((c) => c.link.contains('prixa.ai')).first.link;
+      partner = credits.where((c) => c.link.contains('prixa.ai')).first;
     });
   }
 
@@ -247,20 +247,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(child: Container()),
         getMainMenu(),
         Container(height: 10),
-        getPrixaButton(),
+        getPartnerButton(),
         Container(height: 16),
       ],
     );
   }
 
-  FlatButton getPrixaButton() {
+  FlatButton getpartnerButton() {
+    final partner = ' with ${partner?.creator}';
+    final content = 'Periksa Gejala ${partner != null ? partner : ''}';
     return FlatButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
         side: BorderSide(color: Colors.white),
       ),
       child: Text(
-        'Periksa Gejala with Prixa.ai',
+        content,
         style: GoogleFonts.muli(
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -268,7 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       onPressed: () {
-        if (prixaLink.isNotEmpty) launch(prixaLink);
+        if (partner != null) launch(partner.link);
       },
     );
   }
