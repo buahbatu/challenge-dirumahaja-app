@@ -6,12 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:dirumahaja/core/entity/entity_rule.dart';
 
 class RuleBox extends StatefulWidget {
-  final double height;
-  const RuleBox({
-    Key key,
-    this.height = 420,
-  }) : super(key: key);
-
   @override
   _RuleBoxState createState() => _RuleBoxState();
 }
@@ -39,40 +33,41 @@ class _RuleBoxState extends State<RuleBox> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        height: widget.height,
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: rules.map((r) => createItem(r)).toList(),
         ),
       ),
     );
   }
 
-  Row createItem(Rule rule) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          height: 10,
-          width: 10,
-          margin: const EdgeInsets.only(top: 4, right: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: HexColor('F9C126'),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            rule.content,
-            style: GoogleFonts.muli(
-              color: Colors.black87,
-              fontWeight: rule.isBold ? FontWeight.w800 : null,
+  Widget createItem(Rule rule) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            height: 10,
+            width: 10,
+            margin: const EdgeInsets.only(top: 4, right: 8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: HexColor('F9C126'),
             ),
           ),
-        ),
-      ],
+          Expanded(
+            child: Text(
+              rule.content,
+              style: GoogleFonts.muli(
+                color: Colors.black87,
+                fontWeight: rule.isBold ? FontWeight.w800 : null,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

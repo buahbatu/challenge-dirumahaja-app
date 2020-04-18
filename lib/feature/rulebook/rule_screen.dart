@@ -2,7 +2,6 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/rulebook/credit_box.dart';
 import 'package:dirumahaja/feature/rulebook/rule_box.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -70,7 +69,7 @@ class RuleScreen extends StatelessWidget {
               ),
             ),
             Container(height: 32),
-            RuleBox(height: 450),
+            RuleBox(),
             Container(height: 32),
             CreditBox(),
             Container(height: 32),
