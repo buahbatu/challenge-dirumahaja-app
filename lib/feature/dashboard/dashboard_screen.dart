@@ -197,6 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void setupFCM(String username) async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
     _firebaseMessaging.subscribeToTopic(username);
+    _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
