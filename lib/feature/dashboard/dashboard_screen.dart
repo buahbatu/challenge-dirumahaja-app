@@ -253,9 +253,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  FlatButton getpartnerButton() {
-    final partner = ' with ${partner?.creator}';
-    final content = 'Periksa Gejala ${partner != null ? partner : ''}';
+  FlatButton getPartnerButton() {
+    final partnerText = ' with ${partner?.creator}';
+    final content = 'Periksa Gejala${partner != null ? partnerText : ''}';
     return FlatButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
