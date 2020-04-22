@@ -36,6 +36,7 @@ class _AddressScreenState extends State<AddressScreen>
     List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
       readPosition.latitude,
       readPosition.longitude,
+      localeIdentifier: 'id_ID'
     );
     String city = '';
 
