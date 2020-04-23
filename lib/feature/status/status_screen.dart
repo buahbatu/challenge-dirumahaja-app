@@ -57,7 +57,7 @@ class _StatusScreenState extends State<StatusScreen> {
     final user = await FirebaseAuth.instance.currentUser();
 
     final profileResult = await Api().get<Profile>(
-      path: '/profile?cache=false',
+      path: '/profile?cache=true',
       dataParser: Profile.fromJson,
       headers: {
         'uid': user.uid,

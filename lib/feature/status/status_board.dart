@@ -51,7 +51,7 @@ class _StatusBoardState extends State<StatusBoard> {
     final user = await FirebaseAuth.instance.currentUser();
 
     final request = await Api().getDio().get<Map<String, dynamic>>(
-          '/profile/relation?cache=false',
+          '/profile/relation?cache=true',
           options: Options(headers: {'uid': user.uid}),
         );
 

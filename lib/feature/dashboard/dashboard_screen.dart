@@ -153,7 +153,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final user = await FirebaseAuth.instance.currentUser();
 
     final request = await Api().getDio().get<Map<String, dynamic>>(
-          '/profile/notification?cache=false',
+          '/profile/notification?cache=true',
           options: Options(headers: {'uid': user.uid}),
         );
 
@@ -167,7 +167,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final user = await FirebaseAuth.instance.currentUser();
 
     final profileResult = await Api().get<Profile>(
-      path: '/profile?cache=false',
+      path: '/profile?cache=true',
       dataParser: Profile.fromJson,
       headers: {'uid': user.uid},
     );
