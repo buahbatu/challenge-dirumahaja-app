@@ -18,7 +18,7 @@ class LocationUpdater {
     final user = await FirebaseAuth.instance.currentUser();
     // final nextCheckIn = DateTime.now().add(Duration(hours: randHour));
 
-    if (user.uid != null) {
+    if (user?.uid != null) {
       final checkInResult = await Api().post<CheckIn>(
         path: '/session/checkin',
         dataParser: CheckIn.fromMap,
