@@ -26,31 +26,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   List<Widget> pages;
+  List<bool> isPageValids;
 
   List<Widget> getPages() {
-    if (pages == null)
+    if (pages == null) {
       pages = [
         ProfileScreen(
-          onSubmit: ({username, age, gender}) => updateProfile(profile.copyWith(
-            username: username,
-            age: age,
-            gender: gender,
-          )),
+          onSubmit: ({username, age, gender}) {
+            updateProfile(profile.copyWith(
+              username: username,
+              age: age,
+              gender: gender,
+            ));
+            isPageValids[0] = profile.username?.isNotEmpty ?? false;
+          },
         ),
         AddressScreen(
-          onSubmit: (coordinate, locationName) => updateProfile(
-            profile.copyWith(
-              coordinate: coordinate,
-              locationName: locationName,
-            ),
-          ),
+          onSubmit: (coordinate, locationName) {
+            updateProfile(
+              profile.copyWith(
+                coordinate: coordinate,
+                locationName: locationName,
+              ),
+            );
+            isPageValids[1] = (profile.coordinate?.isNotEmpty ?? false) &&
+                (profile.locationName?.isNotEmpty ?? false);
+          },
         ),
         ChallengerScreen(
-          onSubmit: (challenger) =>
-              updateProfile(profile.copyWith(challenger: challenger)),
+          onSubmit: (challenger) {
+            if (challenger != "-1") {
+              updateProfile(profile.copyWith(challenger: challenger));
+              isPageValids[2] = profile.challenger?.isNotEmpty ?? false;
+            } else {
+              updateProfile(profile.copyWith(challenger: ""));
+              isPageValids[2] = true;
+            }
+          },
         ),
         RuleBookScreen(),
       ];
+      isPageValids = [false, false, true, true];
+    }
     return pages;
   }
 
@@ -159,6 +176,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void onNextClick(BuildContext context) {
     if (currentPage + 1 < RegisterScreen.maxPage) {
+      if (!isPageValids[currentPage]) {
+        onRegisterError('Tolong diisi dulu ya datanya', context);
+        return;
+      }
+
       controller.animateToPage(
         currentPage + 1,
         duration: Duration(seconds: 1),

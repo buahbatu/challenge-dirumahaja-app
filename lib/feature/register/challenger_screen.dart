@@ -23,18 +23,25 @@ class _ChallengerScreenState extends State<ChallengerScreen>
 
   void onUsernameChange(String name) async {
     userName = name;
-    final result = await Api().post<ProfileExist>(
-      path: '/auth/check',
-      body: {"username": userName},
-      dataParser: ProfileExist.dataParser,
-    );
-    setState(() {
-      isUsernameExist = result?.data?.isExist ?? false;
-      if (isUsernameExist)
-        widget.onSubmit(userName);
-      else
-        widget.onSubmit("");
-    });
+    if (name.isNotEmpty) {
+      final result = await Api().post<ProfileExist>(
+        path: '/auth/check',
+        body: {"username": userName},
+        dataParser: ProfileExist.dataParser,
+      );
+      setState(() {
+        isUsernameExist = result?.data?.isExist ?? false;
+        if (isUsernameExist)
+          widget.onSubmit(userName);
+        else
+          widget.onSubmit("");
+      });
+    } else {
+      setState(() {
+        isUsernameExist = true;
+        widget.onSubmit("-1");
+      });
+    }
   }
 
   @override
@@ -139,84 +146,6 @@ class _ChallengerScreenState extends State<ChallengerScreen>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  List<Widget> getMapSections() {
-    return [
-      Text(
-        'Cakupan Lingkungan Rumah',
-        style: GoogleFonts.raleway(
-          fontSize: 14,
-          fontWeight: FontWeight.w800,
-          color: AppColor.titleColor.toHexColor(),
-        ),
-      ),
-      Container(height: 8),
-      Container(
-        height: 130,
-        color: AppColor.greyBgColor.toHexColor(),
-      ),
-      Container(height: 8),
-      Text(
-        'Lingkungan rumah 500m dari titik rumah',
-        style: GoogleFonts.muli(
-          fontSize: 12,
-          color: AppColor.bodyColor.toHexColor(),
-        ),
-      ),
-    ];
-  }
-
-  Container getGenderRow() {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: AppColor.greyBgColor.toHexColor(),
-          borderRadius: BorderRadius.circular(8)),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: MaterialButton(
-              elevation: 0,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Pria',
-                style: GoogleFonts.muli(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              color: HexColor('0165C0'),
-              onPressed: () {},
-            ),
-          ),
-          Expanded(
-            child: MaterialButton(
-              elevation: 0,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Wanita',
-                style: GoogleFonts.muli(
-                  color: AppColor.bodyColor.toHexColor(),
-                  // color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              // color: HexColor('0165C0'),
-              onPressed: () {},
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -18,20 +18,22 @@ class LocationUpdater {
     final user = await FirebaseAuth.instance.currentUser();
     // final nextCheckIn = DateTime.now().add(Duration(hours: randHour));
 
-    final checkInResult = await Api().post<CheckIn>(
-      path: '/session/checkin',
-      dataParser: CheckIn.fromMap,
-      headers: {'uid': user.uid},
-      body: {
-        "coordinate": "${location.latitude}, ${location.longitude}",
-        // "next_checkin": nextCheckIn.toString(),
-      },
-    );
+    if (user.uid != null) {
+      final checkInResult = await Api().post<CheckIn>(
+        path: '/session/checkin',
+        dataParser: CheckIn.fromMap,
+        headers: {'uid': user.uid},
+        body: {
+          "coordinate": "${location.latitude}, ${location.longitude}",
+          // "next_checkin": nextCheckIn.toString(),
+        },
+      );
 
-    // print(
-    //   "[dirumahaja]: send coordinate = $source: ${location.latitude}, ${location.longitude}",
-    // );
+      // print(
+      //   "[dirumahaja]: send coordinate = $source: ${location.latitude}, ${location.longitude}",
+      // );
 
-    onResult?.call(checkInResult);
+      onResult?.call(checkInResult);
+    }
   }
 }

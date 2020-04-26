@@ -68,9 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: {"username": userName},
       dataParser: ProfileExist.dataParser,
     );
-    widget.onSubmit(username: userName);
     setState(() {
       isUsernameExist = result?.data?.isExist ?? false;
+      if (!isUsernameExist) widget.onSubmit(username: userName);
     });
   }
 
