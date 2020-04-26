@@ -2,6 +2,7 @@ import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/core/tools/loading_dialog.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/register/address_screen.dart';
 import 'package:dirumahaja/feature/register/challenger_screen.dart';
@@ -9,6 +10,8 @@ import 'package:dirumahaja/feature/register/profile_screen.dart';
 import 'package:dirumahaja/feature/register/rulebook_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_color/flutter_color.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -127,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void doRegister(Profile profile, BuildContext context) async {
+    LoadingDialog.showLoading(context, 'Bentar ya, sedang daftarin dulu...');
     final FirebaseAuth _auth = FirebaseAuth.instance;
     // make sure to create new user
     if (await _auth.currentUser() != null) _auth.signOut();
@@ -148,6 +152,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: profileData,
       dataParser: null,
     );
+
+    // close loading dialog
+    LoadingDialog.dismissLoading(context);
 
     if (result.isSuccess()) {
       onRegisterSuccess();

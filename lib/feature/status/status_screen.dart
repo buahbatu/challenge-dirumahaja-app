@@ -5,6 +5,7 @@ import 'package:dirumahaja/core/entity/entity_profile.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
+import 'package:dirumahaja/core/tools/loading_dialog.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -89,11 +90,12 @@ class _StatusScreenState extends State<StatusScreen> {
     try {
       final user = await FirebaseAuth.instance.currentUser();
 
-      final request = await Api().getDio().put<Map<String, dynamic>>(
-            '/emblem/${e.id}',
-            options: Options(headers: {'uid': user.uid}),
-          );
+      LoadingDialog.showLoading(context, 'Bentar ya, sedang memilih emblem');
 
+      await Api().getDio().put<Map<String, dynamic>>('/emblem/${e.id}',
+          options: Options(headers: {'uid': user.uid}));
+
+      LoadingDialog.dismissLoading(context);
       loadProfile();
     } catch (error) {
       // print(error);

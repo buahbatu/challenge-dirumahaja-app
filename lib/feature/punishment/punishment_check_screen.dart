@@ -4,6 +4,7 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/core/entity/entity_punishment.dart';
 import 'package:dirumahaja/core/entity/entity_rule.dart';
+import 'package:dirumahaja/core/tools/loading_dialog.dart';
 import 'package:dirumahaja/feature/dashboard/dashboard_screen.dart';
 import 'package:dirumahaja/feature/rulebook/rule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -149,6 +150,7 @@ class _PunishmentCheckScreenState extends State<PunishmentCheckScreen> {
   }
 
   void resetStatus() async {
+    LoadingDialog.showLoading(context, 'Mantap kak, ayo coba lagi ya!');
     await logRestartEvent();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (ctx) => DashboardScreen()),

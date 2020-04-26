@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dirumahaja/core/entity/entity_punishment.dart';
 import 'package:dirumahaja/core/network/api.dart';
+import 'package:dirumahaja/core/tools/loading_dialog.dart';
 import 'package:dirumahaja/feature/punishment/punishment_check_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,15 @@ class _PunishmentScreenState extends State<PunishmentScreen> {
   void loadPunishment() async {
     final user = await FirebaseAuth.instance.currentUser();
 
+    LoadingDialog.showLoading(context, 'Bentar ya, lagi milih hukumannya');
     final request = await Api().getDio().get<Map<String, dynamic>>(
           '/session/punishments',
           options: Options(headers: {'uid': user.uid}),
         );
 
     final punishments = Punishment.fromMapList(request.data['data']);
+    LoadingDialog.dismissLoading(context);
+
     setState(() {
       punishmentList = punishments;
     });
