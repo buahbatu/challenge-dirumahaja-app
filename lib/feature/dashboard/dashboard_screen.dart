@@ -8,6 +8,7 @@ import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/res/app_images.dart';
 import 'package:dirumahaja/feature/activity/activity_screen.dart';
+import 'package:dirumahaja/feature/punishment/punishment_screen.dart';
 import 'package:dirumahaja/feature/status/status_board.dart';
 import 'package:dirumahaja/feature/information/information_screen.dart';
 import 'package:dirumahaja/feature/notification/notification_screen.dart';
@@ -91,11 +92,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (isUpdateExist) {
       final updateLink = jsonVersions['app_update_link'];
-      showUpdateDialog(updateLink);
+      showNotifDialog(
+        'Terdapat versi terbaru',
+        'Yuk lakukan udpate aplikasi, agar mendapatkan fitur terbaru',
+        'Download Update',
+        AppColor.titleColor.toHexColor(),
+        () {
+          launch(updateLink);
+        },
+      );
     }
   }
 
-  void showUpdateDialog(String link) {
+  void showNotifDialog(
+    String title,
+    String desc,
+    String actionText,
+    Color theme,
+    VoidCallback onClick,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -104,28 +119,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.all(14),
           children: <Widget>[
             Text(
-              'Terdapat versi terbaru',
+              title,
               style: GoogleFonts.raleway(
-                color: AppColor.titleColor.toHexColor(),
+                color: theme,
                 fontWeight: FontWeight.w800,
                 fontSize: 18,
               ),
             ),
             Container(height: 12),
             Text(
-              'Yuk lakukan udpate aplikasi, agar mendapatkan fitur terbaru',
+              desc,
               style: GoogleFonts.raleway(fontSize: 14),
             ),
             Container(height: 12),
             FlatButton(
-              color: AppColor.titleColor.toHexColor(),
+              color: theme,
               textColor: Colors.white,
-              child: Text('Download Update'),
+              child: Text(actionText),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-                side: BorderSide(color: AppColor.titleColor.toHexColor()),
+                side: BorderSide(color: theme),
               ),
-              onPressed: () => launch(link),
+              onPressed: onClick,
             )
           ],
         ),
@@ -192,6 +207,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
 
     setupFCM(profile.username);
+    if (profile.sessionStatus == 30) {
+      showNotifDialog(
+        'Yah.. kamu kalah tantangan',
+        'Ayok lakukan hukuman dan mulai kembali tantangan Ayok #dirumahaja',
+        'Pilih Tantangan',
+        AppColor.dangerColor.toHexColor(),
+        () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => PunishmentScreen(),
+          ));
+        },
+      );
+    }
   }
 
   void setupFCM(String username) async {
@@ -367,7 +395,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: HexColor('8EC13F'),
+                color: profile?.sessionStatus != 30
+                    ? AppColor.safeColor.toHexColor()
+                    : AppColor.dangerColor.toHexColor(),
               ),
             ),
             Container(width: 4),
@@ -508,7 +538,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             margin: const EdgeInsets.only(left: 26, bottom: 26),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: HexColor('FF5555'),
+              color: AppColor.dangerColor.toHexColor(),
             ),
           ),
       ],

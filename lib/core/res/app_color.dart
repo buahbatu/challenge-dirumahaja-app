@@ -11,6 +11,8 @@ extension AppColor on String {
   static final bodyColor = '666666';
   static final greyBgColor = 'F5F5F5';
   static final bgColor = 'F0F6FB';
+  static final dangerColor = 'FF5555';
+  static final safeColor = '8EC13F';
 
   static final skyGradient = LinearGradient(
     begin: Alignment.topCenter,

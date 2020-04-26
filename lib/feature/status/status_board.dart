@@ -173,7 +173,14 @@ class _StatusBoardState extends State<StatusBoard> {
               children: <Widget>[
                 ...friendList
                     .take(3)
-                    .map((f) => createImage(f?.emblemImgUrl ?? ''))
+                    .map(
+                      (f) => createImage(
+                        f?.emblemImgUrl ?? '',
+                        f?.sessionStatus != 30
+                            ? AppColor.safeColor.toHexColor()
+                            : AppColor.dangerColor.toHexColor(),
+                      ),
+                    )
                     .toList(),
                 if (friendList.length > 3)
                   Container(
@@ -226,7 +233,7 @@ class _StatusBoardState extends State<StatusBoard> {
     );
   }
 
-  Widget createImage(String path) {
+  Widget createImage(String path, Color theme) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -236,7 +243,7 @@ class _StatusBoardState extends State<StatusBoard> {
           decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: HexColor('8EC13F'), width: 2),
+            border: Border.all(color: theme, width: 2),
           ),
         ),
         CachedNetworkImage(
