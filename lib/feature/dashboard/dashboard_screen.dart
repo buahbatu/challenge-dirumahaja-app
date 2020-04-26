@@ -21,6 +21,7 @@ import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
+import 'package:recase/recase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -383,7 +384,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: <Widget>[
         Expanded(child: Container(), flex: 12),
         Text(
-          profile?.username ?? '...',
+          ReCase(profile?.username ?? '...').titleCase,
           style: GoogleFonts.muli(color: userNameColor),
         ),
         Container(height: 2),
@@ -402,7 +403,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Container(width: 4),
             Text(
-              profile?.locationName ?? 'Unknown',
+              ReCase(profile?.locationName ?? 'Unknown').titleCase,
               style: GoogleFonts.raleway(
                 color: userNameColor,
                 fontSize: 16,
