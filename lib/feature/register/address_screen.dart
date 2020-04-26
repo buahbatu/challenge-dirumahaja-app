@@ -36,7 +36,7 @@ class _AddressScreenState extends State<AddressScreen>
     List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
       readPosition.latitude,
       readPosition.longitude,
-      localeIdentifier: 'id_ID'
+      localeIdentifier: 'id_ID',
     );
     String city = '';
 
@@ -223,58 +223,6 @@ class _AddressScreenState extends State<AddressScreen>
           ),
         ),
       ],
-    );
-  }
-
-  Container getGenderRow() {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: AppColor.greyBgColor.toHexColor(),
-          borderRadius: BorderRadius.circular(8)),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: MaterialButton(
-              elevation: 0,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Pria',
-                style: GoogleFonts.muli(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              color: HexColor('0165C0'),
-              onPressed: () {},
-            ),
-          ),
-          Expanded(
-            child: MaterialButton(
-              elevation: 0,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Wanita',
-                style: GoogleFonts.muli(
-                  color: AppColor.bodyColor.toHexColor(),
-                  // color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              // color: HexColor('0165C0'),
-              onPressed: () {},
-            ),
-          ),
-        ],
-      ),
     );
   }
 

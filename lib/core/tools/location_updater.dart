@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dirumahaja/core/entity/entity_checkin.dart';
 import 'package:dirumahaja/core/network/api.dart';
 import 'package:dirumahaja/core/network/base_result.dart';
@@ -24,8 +22,9 @@ class LocationUpdater {
         dataParser: CheckIn.fromMap,
         headers: {'uid': user.uid},
         body: {
-          "coordinate": "${location.latitude}, ${location.longitude}",
           // "next_checkin": nextCheckIn.toString(),
+          "coordinate": "${location.latitude}, ${location.longitude}",
+          "is_mock": location.mocked
         },
       );
 
