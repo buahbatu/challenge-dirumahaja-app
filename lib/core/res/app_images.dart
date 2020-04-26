@@ -3,6 +3,8 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+final defaultDomain = "https://dirumahaja.miloo.id/";
+
 extension AppImages on String {
   SvgPicture toSvgPicture({
     Key key,
@@ -19,10 +21,9 @@ extension AppImages on String {
     String semanticsLabel,
     bool excludeFromSemantics = false,
   }) {
-    final defaultDomain = "https://dirumahaja.miloo.id/";
     final domainSplit = this.split(defaultDomain);
     final assetPath = domainSplit.length > 1 ? domainSplit[1] : this;
-    
+
     return SvgPicture.network(
       'https://dirumahaja-challenge.web.app/' + assetPath,
       key: key,
@@ -64,7 +65,6 @@ extension AppImages on String {
     BlendMode colorBlendMode,
     Duration placeholderFadeInDuration,
   }) {
-    final defaultDomain = "https://dirumahaja.miloo.id/";
     final domainSplit = this.split(defaultDomain);
     final assetPath = domainSplit.length > 1 ? domainSplit[1] : this;
 
@@ -104,6 +104,7 @@ extension AppImages on String {
   static final assestmentSvg = 'assets/img/app/svg/assestment.svg';
   static final tearSvg = 'assets/img/app/svg/tear.svg';
   static final happySvg = 'assets/img/app/svg/happy.svg';
+  static final masjidSvg = 'assets/img/app/svg/masjid.svg';
 
   // png
   static final homeBgPng = 'assets/img/app/png/home-bg.png';
