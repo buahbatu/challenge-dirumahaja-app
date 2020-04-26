@@ -4,7 +4,6 @@ import 'package:dirumahaja/core/res/app_color.dart';
 import 'package:dirumahaja/core/tools/static_map.dart';
 import 'package:dirumahaja/feature/map/map_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_color/flutter_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,20 +32,11 @@ class _AddressScreenState extends State<AddressScreen>
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
-      readPosition.latitude,
-      readPosition.longitude,
-      localeIdentifier: 'id_ID',
-    );
-    String city = '';
-
-    if (placemark.length > 0) {
-      city = placemark[0].subAdministrativeArea;
-    }
+    final place = await ReverseGeocoder.loadCurrentLocation();
 
     widget.onSubmit(
       '${readPosition.latitude}, ${readPosition.longitude}',
-      city,
+      place.city,
     );
 
     setState(() {
